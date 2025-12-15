@@ -1,25 +1,14 @@
 import {Col, Container, Row} from 'react-bootstrap'
-import TotalCancelOngoingBooking from '@/views/dashboard/components/TotalCancelOngoingBookingCounts'
 import TotalActiveOtherStatusVendor from '@/views/dashboard/components/TotalActiveOtherStatusVendorCounts'
-import GetConsumerCounts from '@/views/dashboard/components/GetConsumerCounts'
 import RequestStatistics from '@/views/dashboard/components/RequestStatistics'
-import TotalBookingCount from '@/views/dashboard/components/TotalBookingCount'
 
 const Page = () => {
     return (
         <Container fluid className='mt-3'>
-            {/* <PageTitle
-                title="The Ultimate Admin & Dashboard Theme"
-                subtitle="A premium collection of elegant, accessible components and a powerful codebase. Built for modern frameworks. Developer Friendly. Production Ready."
-                badge={{
-                    title: 'Medium and Large Business',
-                    icon: LuSparkles,
-                }}
-            /> */}
 
             <Row className="row-cols-xxl-4 row-cols-md-2 row-cols-1">
                 <Col>
-                    <TotalBookingCount/>
+                    <TotalActiveOtherStatusVendor/>
                 </Col>
 
                 <Col>
@@ -27,11 +16,11 @@ const Page = () => {
                 </Col>  
 
                 <Col>
-                    <TotalCancelOngoingBooking/>
+                    <TotalActiveOtherStatusVendor/>
                 </Col>
 
                 <Col>
-                    <GetConsumerCounts/>
+                    <TotalActiveOtherStatusVendor/>
                 </Col>
             </Row>
 
@@ -41,17 +30,6 @@ const Page = () => {
                 </Col>
             </Row>
 
-            {/* <Row>
-                <Col xxl={6}>
-                    <LatestNewOngoingBookingLists/>
-                </Col>
-
-                <Col xxl={6}>
-                    <Latest5BookingTransactionList/>
-
-                    <Latest5VendorTransactionList/>
-                </Col>
-            </Row> */}
         </Container>
     )
 }

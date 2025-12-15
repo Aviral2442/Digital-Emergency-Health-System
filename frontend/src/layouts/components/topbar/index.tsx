@@ -120,7 +120,7 @@ const Topbar = () => {
         </div>
 
         <div className="d-flex align-items-center gap-2">
-          <div className="app-search d-none d-xl-flex me-xl-2">
+          {/* <div className="app-search d-none d-xl-flex me-xl-2">
             <FormControl
               type="search"
               className="topbar-search"
@@ -128,13 +128,13 @@ const Topbar = () => {
               placeholder="Search for something..."
             />
             <LuSearch className="app-search-icon text-muted" />
-          </div>
+          </div> */}
 
           <SkinDropdown />
 
           {/* <LanguageDropdown/> */}
 
-          <NotificationDropdown />
+          {/* <NotificationDropdown /> */}
 
           {/* <CustomizerToggler/> */}
 

@@ -56,7 +56,7 @@ const ActiveUsers = () => {
                           <CountUp end={Number(total_vendors) || 0} duration={2} enableScrollSpy scrollSpyOnce/>
                         </span>
                         </h3>
-                        <p className="text-muted mb-2">Total Vendors in Collection</p>
+                        <p className="text-muted mb-2">Total</p>
                     </div>
                     <div>
                         <LuUsers className="text-muted fs-24 svg-sw-10"/>
@@ -67,16 +67,16 @@ const ActiveUsers = () => {
 
                 <div className="d-flex justify-content-between">
                     <div>
-                        <span className="text-muted">Active Vendors</span>
+                        <span className="text-muted">On Duty</span>
                         <h5 className="mb-0">{active_vendors}</h5>
                     </div>
                     <div className="text-end">
-                        <span className="text-muted">Other Vendors</span>
+                        <span className="text-muted">Off Duty</span>
                         <h5 className="mb-0">{other_status_vendors}</h5>
                     </div>
                 </div>
             </CardBody>
-            <CardFooter className="text-muted text-center">{today_new_vendors} New Vendors Joined Today</CardFooter>
+            <CardFooter className="text-muted text-center">{today_new_vendors} Active Data Currently We Have</CardFooter>
         </Card>
     )
 }
