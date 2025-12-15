@@ -170,7 +170,7 @@ const PromptsUsage = () => {
       <CardBody>
         <div className="d-flex justify-content-between align-items-start">
           <div>
-            <h5 className="text-uppercase mb-3">Booking Counts</h5>
+            <h5 className="text-uppercase mb-3">Police</h5>
           </div>
           <div>
             <LuMessageSquare className="text-muted fs-24 svg-sw-10" />

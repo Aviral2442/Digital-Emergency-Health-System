@@ -22,12 +22,12 @@ const Sidenav = () => {
                 <AppMenu/>
             </SimpleBar>
 
-            <div className="menu-collapse-box d-none d-xl-block">
+            {/* <div className="menu-collapse-box d-none d-xl-block">
                 <button className="button-collapse-toggle" onClick={handleCollapse}>
                     <LuSquareChevronLeft className="align-middle flex-shrink-0"/>
                     <span>Collapse Menu</span>
                 </button>
-            </div>
+            </div> */}
         </div>
     )
 }

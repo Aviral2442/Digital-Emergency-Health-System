@@ -107,7 +107,7 @@ const ResponseAccuracy = () => {
       <CardBody>
         <div className="d-flex justify-content-between align-items-start mb-3">
           <div>
-            <h5 className="text-uppercase">Booking Statistics</h5>
+            <h5 className="text-uppercase">Driver's</h5>
           </div>
           <div>
             <LuActivity className="text-muted fs-24 svg-sw-10" />

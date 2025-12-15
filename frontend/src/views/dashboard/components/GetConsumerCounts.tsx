@@ -62,7 +62,7 @@ const TokenUsage = () => {
             <CardBody>
                 <div className="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <h5 className="text-uppercase">Consumer's</h5>
+                        <h5 className="text-uppercase">Hospital's</h5>
                     </div>
                     <div>
                         <LuCpu className="text-muted fs-24 svg-sw-10"/>

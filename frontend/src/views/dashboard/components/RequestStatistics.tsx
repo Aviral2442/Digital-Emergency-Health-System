@@ -117,7 +117,7 @@ const RequestStatistics = () => {
     return (
         <Card>
             <CardBody>
-                <Row className="align-items-center">
+                {/* <Row className="align-items-center">
                     <Col xl={3} md={6}>
                         <div className="text-center">
                             <p className="mb-4">
@@ -157,14 +157,14 @@ const RequestStatistics = () => {
                             />
                         </div>
                     </Col>
-                </Row>
+                </Row> */}
             </CardBody>
 
-            <CardFooter>
+            {/* <CardFooter>
                 <div className="d-flex align-items-center text-muted justify-content-center">
                     <div>Last update: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, ' ')}</div>
                 </div>
-            </CardFooter>
+            </CardFooter> */}
         </Card>
     )
 }

@@ -1,12 +1,9 @@
 import {Col, Container, Row} from 'react-bootstrap'
 import TotalCancelOngoingBooking from '@/views/dashboard/components/TotalCancelOngoingBookingCounts'
 import TotalActiveOtherStatusVendor from '@/views/dashboard/components/TotalActiveOtherStatusVendorCounts'
-import Latest5BookingTransactionList from '@/views/dashboard/components/Latest5BookingTransactionList'
 import GetConsumerCounts from '@/views/dashboard/components/GetConsumerCounts'
 import RequestStatistics from '@/views/dashboard/components/RequestStatistics'
-import LatestNewOngoingBookingLists from '@/views/dashboard/components/LatestNewOngoingBookingLists'
 import TotalBookingCount from '@/views/dashboard/components/TotalBookingCount'
-import Latest5VendorTransactionList from '@/views/dashboard/components/Latest5VendorTransactionList'
 
 const Page = () => {
     return (
@@ -44,7 +41,7 @@ const Page = () => {
                 </Col>
             </Row>
 
-            <Row>
+            {/* <Row>
                 <Col xxl={6}>
                     <LatestNewOngoingBookingLists/>
                 </Col>
@@ -54,7 +51,7 @@ const Page = () => {
 
                     <Latest5VendorTransactionList/>
                 </Col>
-            </Row>
+            </Row> */}
         </Container>
     )
 }
