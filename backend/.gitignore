@@ -1,4 +1,2 @@
-# Ignore dist, node_modules, etc.
-
 dist/
 node_modules/
