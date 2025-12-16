@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ambulanceBookingDetailService, ambulanceBookingCountService, getAmbulanceBookingListService, getBulkAmbulanceBookingListService, getRegularAmbulanceBookingListService, getRentalAmbulanceBookingListService, ambulanceCompleteOngoingCancelReminderBookingCounts } from "../services/ambulance.service";
+import { ambulanceBookingDetailService, ambulanceBookingCountService, getAmbulanceBookingListService, ambulanceCompleteOngoingCancelReminderBookingCounts } from "../services/ambulance.service";
 
 // CONTROLLER TO GET TOTAL AMBULANCE BOOKING COUNT
 export const ambulanceBookingCountController = async (req: Request, res: Response, next: NextFunction) => {
