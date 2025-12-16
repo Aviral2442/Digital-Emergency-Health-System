@@ -34,18 +34,17 @@ const EditCity = lazy(() => import('@/views/pages/content-writing/city/component
 const DriverEmergency = lazy(() => import('@/views/pages/emergency/driver'))
 const ConsumerEmergency = lazy(() => import('@/views/pages/emergency/consumer'))
 
-//manpower
-const ManpowerCategory = lazy(() => import("@/views/pages/manpower/category"));
-const Booking = lazy(() => import("@/views/pages/manpower/booking"));
-const BookingDetails = lazy(() => import("@/views/pages/manpower/booking/bookingDetails"));
-const VendorList = lazy(() => import('@/views/pages/manpower/vendorlist'))
-const VendorDetails = lazy(() => import('@/views/pages/manpower/vendorlist/vendorDetails'))
+
+const DriverList = lazy(() => import('@/views/pages/ambulance/driver'))
+const DriverDetails = lazy(() => import('@/views/pages/ambulance/driver/DriverDetailed'));
+const AmbulanceBooking = lazy(() => import('@/views/pages/ambulance/booking'))
+const AmbulanceBookingDetails = lazy(() => import('@/views/pages/ambulance/booking/BookingDetails'));
+const HospitalList = lazy(() => import('@/views/pages/hospital'))
+const PoliceList = lazy(() => import('@/views/pages/police')) 
 
 //amblulance Pages
 const AmbulanceList = lazy(() => import('@/views/pages/ambulance/category'))
 const PartnerList = lazy(() => import('@/views/pages/ambulance/partner'))
-const DriverList = lazy(() => import('@/views/pages/ambulance/driver'))
-const AmbulanceBooking = lazy(() => import('@/views/pages/ambulance/booking'))
 const DriverDuty = lazy(() => import('@/views/pages/ambulance/driver-duty'))
 const DriverDutyDetails = lazy(() => import('@/views/pages/ambulance/driver-duty/components/DriverDuty'))
 const AddDriver = lazy(() => import('@/views/pages/ambulance/driver/components/AddDriver'))
@@ -53,13 +52,11 @@ const EditDriver = lazy(() => import('@/views/pages/ambulance/driver/components/
 const DriverDutyMap = lazy(() => import('@/views/pages/ambulance/driver-duty/components/DriverDutyMap'))
 const AddPartner = lazy(() => import('@/views/pages/ambulance/partner/components/AddPartner'));
 const EditPartner = lazy(() => import('@/views/pages/ambulance/partner/components/AddPartner'));
-const DriverDetails = lazy(() => import('@/views/pages/ambulance/driver/DriverDetailed'));
 const PartnerDetails = lazy(() => import('@/views/pages/ambulance/partner/PartnerDetailed'));
 const VehicalList = lazy(() => import('@/views/pages/ambulance/vehicle'));
 const AddVehicle = lazy(() => import('@/views/pages/ambulance/vehicle/components/AddVehicle'));
 const EditVehicle = lazy(() => import('@/views/pages/ambulance/vehicle/components/AddVehicle'));
 const DriverTransactionDetails = lazy(() => import('@/views/pages/ambulance/driver/'));
-const AmbulanceBookingDetails = lazy(() => import('@/views/pages/ambulance/booking/BookingDetails'));
 
 
 //transaction Pages
@@ -143,7 +140,7 @@ const errorRoutes: RouteObject[] = [
 ];
 
 const dashboardRoutes: RouteObject[] = [
-  { path: "/manpower-dashboard", element: <Dashboard /> },
+  { path: "/dashboard", element: <Dashboard /> },
   { path: "/ambulance-dashboard", element: <AmbulanceDashboard /> },
 ];
 
@@ -160,14 +157,7 @@ const pagesRoutes: RouteObject[] = [
   { path: "/pages/terms-conditions", element: <TermsConditions /> },
   { path: "/pages/timeline", element: <Timeline /> },
 
-  //manpower
-  { path: "/manpower-category", element: <ManpowerCategory /> },
-  { path: "/manpower-bookings", element: <Booking/> },
-  { path: "/manpower/booking/details/:id", element: <BookingDetails/> },
-  { path: "/manpower-vendors", element: <VendorList/>},
-
   { path: "/consumer-list", element: <ConsumerList/>},
-  { path: "/vendor-details/:id", element: <VendorDetails/>},
   { path: "/consumer-details/:id", element: <ConsumerDetails/> },
   { path: "/content-seo/blogs", element: <BlogList/> },
   { path: "/add-blog", element: <AddBlogs/> },
@@ -178,12 +168,16 @@ const pagesRoutes: RouteObject[] = [
   { path: "/emergency/driver", element: <DriverEmergency/> },
   { path: "/emergency/consumer", element: <ConsumerEmergency/> },
   
+  
+  { path: "/driver", element: <DriverList/> },
+  { path: "/booking", element: <AmbulanceBooking/> },
+  { path: "/hospital", element: <HospitalList/> },
+  { path: "/police", element: <PoliceList/> },
+  
   //ambulance Pages
   { path: "/ambulance/partner", element: <PartnerList/> },
-  { path: "/ambulance/driver", element: <DriverList/> },
   { path: "/ambulance/add-driver", element: <AddDriver/> },
   { path: "/ambulance/category", element: <AmbulanceList/> },
-  { path: "/ambulance/booking", element: <AmbulanceBooking/> },
   { path: "/ambulance/driver-duty", element: <DriverDuty/> },
   { path: "/ambulance/driver-duty/:id", element: <DriverDutyDetails/> },
   { path: "/ambulance/driver-duty-map", element: <DriverDutyMap/> },

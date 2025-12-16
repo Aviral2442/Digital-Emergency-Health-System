@@ -17,7 +17,7 @@ const Page: React.FC = () => {
 
   const tabs = [
     { key: 1, title: "Drivers" },
-    { key: 2, title: "Transaction" },
+    // { key: 2, title: "Transaction" },
   ];
 
   return (

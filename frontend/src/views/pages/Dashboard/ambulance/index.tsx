@@ -7,7 +7,7 @@ import Vehicle from "./components/Vehicle";
 import DriverTransaction from "./components/DriverTransaction";
 import PartnerTransaction from "./components/PartnerTransaction";
 import TotalBookingCount from "@/views/dashboard/components/TotalBookingCount";
-import TotalActiveOtherStatusVendor from "@/views/dashboard/components/TotalActiveOtherStatusVendorCounts";
+import TotalActiveOtherStatusVendor from "@/views/dashboard/components/PoliceCounts";
 import TotalCancelOngoingBooking from "@/views/dashboard/components/TotalCancelOngoingBookingCounts";
 import GetConsumerCounts from "@/views/dashboard/components/GetConsumerCounts";
 import RequestStatistics from "@/views/dashboard/components/RequestStatistics";

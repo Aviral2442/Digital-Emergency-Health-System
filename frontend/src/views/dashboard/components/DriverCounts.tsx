@@ -9,19 +9,19 @@ const ActiveUsers = () => {
     const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
     const [vendors, setVendors] = React.useState({
-        today_new_vendors: 0,
-        active_vendors: 0,
-        other_status_vendors: 0,
-        total_vendors: 0
+        today_new_vendors: 17,
+        active_vendors: 5,
+        other_status_vendors: 12,
+        total_vendors: 17
     })
     const [isLoading, setIsLoading] = React.useState(true)
 
     const fetchVendorCounst = async () => {
         try{
             setIsLoading(true)
-            const res = await axios.get(`${baseURL}/dashboard/get_total_active_other_status_vendor_counts`)
+            // const res = await axios.get(`${baseURL}/dashboard/get_total_active_other_status_vendor_counts`)
             // console.log("API Response of VENDORS: ",res.data?.jsonData?.vendorCounts)
-            setVendors(res.data?.jsonData?.vendorCounts || {})
+            // setVendors(res.data?.jsonData?.vendorCounts || {})
         } catch (error){
             console.error("Error fetching VENDORS: ", error)
         } finally {
@@ -50,7 +50,7 @@ const ActiveUsers = () => {
             <CardBody>
                 <div className="d-flex justify-content-between align-items-start">
                     <div>
-                        <h5 className="text-uppercase mb-2">Booking's</h5>
+                        <h5 className="text-uppercase mb-2">Driver's</h5>
                         <h3 className="mb-0 fw-normal">
                         <span>
                           <CountUp end={Number(total_vendors) || 0} duration={2} enableScrollSpy scrollSpyOnce/>
@@ -76,7 +76,7 @@ const ActiveUsers = () => {
                     </div>
                 </div>
             </CardBody>
-            <CardFooter className="text-muted text-center">{today_new_vendors} Active Data Currently We Have</CardFooter>
+            <CardFooter className="text-muted text-center">{5} Active Data Currently We Have</CardFooter>
         </Card>
     )
 }

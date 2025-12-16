@@ -13,9 +13,6 @@ const Page: React.FC = () => {
 
     const tabs = [
         { key: 1, label: "Booking" },
-        { key: 2, label: "Regular Booking" },
-        { key: 3, label: "Rental Booking" },
-        { key: 4, label: "Bulk Booking" },
     ];
 
     const handleAddNew = () => {

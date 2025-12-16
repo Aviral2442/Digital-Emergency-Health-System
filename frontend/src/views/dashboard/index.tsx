@@ -1,5 +1,8 @@
 import {Col, Container, Row} from 'react-bootstrap'
-import TotalActiveOtherStatusVendor from '@/views/dashboard/components/TotalActiveOtherStatusVendorCounts'
+import PoliceCounts from '@/views/dashboard/components/PoliceCounts'
+import BookingCounts from '@/views/dashboard/components/BookingCounts'
+import DriverCounts from '@/views/dashboard/components/DriverCounts'
+import HospitalCounts from '@/views/dashboard/components/HospitalCounts'
 import RequestStatistics from '@/views/dashboard/components/RequestStatistics'
 
 const Page = () => {
@@ -8,19 +11,19 @@ const Page = () => {
 
             <Row className="row-cols-xxl-4 row-cols-md-2 row-cols-1">
                 <Col>
-                    <TotalActiveOtherStatusVendor/>
+                    <PoliceCounts/>
                 </Col>
 
                 <Col>
-                    <TotalActiveOtherStatusVendor/>
+                    <BookingCounts/>
                 </Col>  
 
                 <Col>
-                    <TotalActiveOtherStatusVendor/>
+                    <DriverCounts/>
                 </Col>
 
                 <Col>
-                    <TotalActiveOtherStatusVendor/>
+                    <HospitalCounts/>
                 </Col>
             </Row>
 

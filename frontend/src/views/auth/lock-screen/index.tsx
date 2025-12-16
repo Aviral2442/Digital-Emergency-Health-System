@@ -28,7 +28,7 @@ const Page = () => {
                                         <img src={user2} height={80} width={80}
                                              className="rounded-circle img-thumbnail avatar-xxl mb-2" alt="thumbnail"/>
                                         <span>
-                                        <h5 className="my-0 fw-semibold">Maxine Kennedy</h5>
+                                        {/* <h5 className="my-0 fw-semibold">Maxine Kennedy</h5> */}
                                         <h6 className="my-0 text-muted">Admin Head</h6>
                                     </span>
                                     </div>
