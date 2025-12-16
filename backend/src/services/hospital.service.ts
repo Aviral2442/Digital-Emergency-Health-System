@@ -71,7 +71,7 @@ export const getHospitalListService = async (filters: {
                 hospital_lists.hospital_name,
                 hospital_lists.hospital_logo,
                 hospital_lists.hospital_contact_no,
-                hospital_lists.hospital_city_name,
+                city.city_name,
                 hospital_lists.hospital_added_timestamp,
                 hospital_lists.hospital_status,
                 (
@@ -82,6 +82,7 @@ export const getHospitalListService = async (filters: {
                     LIMIT 1
                 ) AS remark_text
             FROM hospital_lists
+            LEFT JOIN city ON hospital_lists.hospital_city_name = city.city_id
             ${finalWhereSQL}
             ORDER BY hospital_lists.hospital_id DESC
             LIMIT ? OFFSET ?;
@@ -127,8 +128,9 @@ export const getHospitalListService = async (filters: {
 export const hospitalAllDataService = async (hospital_id: number) => {
     try {
         const query = `
-            SELECT hospital_lists.*, hospital_users.hospital_users_name, hospital_users.hospital_users_mobile FROM hospital_lists
+            SELECT hospital_lists.*, hospital_users.hospital_users_name, city.city_name, hospital_users.hospital_users_mobile FROM hospital_lists
             LEFT JOIN hospital_users ON hospital_lists.hospital_user_id = hospital_users.hospital_users_id
+            LEFT JOIN city ON hospital_lists.hospital_city_name = city.city_id
             WHERE hospital_id = ?;
         `;
         const [rows]: any = await db.query(query, [hospital_id]);

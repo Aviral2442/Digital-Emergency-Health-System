@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, Row, Col, Form } from "react-bootstrap";
 import { TbPencil, TbCheck, TbX } from "react-icons/tb";
 import DateConversion from "../DateConversion";
+import { formatDate } from "../DateFormat";
 
 interface FieldConfig {
   label: string;
@@ -104,13 +105,18 @@ const Field: React.FC<FieldProps> = ({
     // Date formatting
     if (type === "date" || type === "datetime-local") {
       try {
-        const date = /^\d+$/.test(valStr)
-          ? new Date(parseInt(valStr) * 1000)
-          : new Date(valStr);
-        if (isNaN(date.getTime())) return valStr;
-        return DateConversion(date.toISOString());
+      const dateStr = valStr;
+      // If timestamp is "0" (or numeric 0), don't convert — treat as empty
+      if (!isNaN(Number(dateStr)) && Number(dateStr) === 0) {
+        return "";
+      }
+      // If it's a numeric timestamp (e.g. milliseconds) convert
+      if (!isNaN(Number(dateStr)) && dateStr.length >= 10) {
+        return formatDate(Number(dateStr));
+      }
+      return formatDate(dateStr);
       } catch {
-        return valStr;
+      return valStr;
       }
     }
 

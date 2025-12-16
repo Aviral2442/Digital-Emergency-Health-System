@@ -7,7 +7,7 @@ type HospitalInfoType = {
     hospital_name: string
     hospital_logo: string
     hospital_contact_no: string
-    hospital_city_name: number
+    city_name: number
     hospital_added_timestamp: string
     hospital_status: string
 }
@@ -40,7 +40,7 @@ export const hospitalColumns = [
     },
     { data: 'hospital_name' },
     { data: 'hospital_contact_no' },
-    { data: 'hospital_city_name' },
+    { data: 'city_name' },
     {
         data: 'hospital_added_timestamp',
         render: (data: string) => {

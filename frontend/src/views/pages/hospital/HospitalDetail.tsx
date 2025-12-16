@@ -35,6 +35,17 @@ const HospitalDetail: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!hospital) return <div>No hospital data found</div>;
 
+  const hospitalServiceStatus = () => {
+    switch (hospital?.hospital_service_status) {
+      case "0":
+        return "Inactive";
+      case "1":
+        return "Active";
+      default:
+        return "Unknown";
+    }
+  }
+
   // ...existing code...
   const sections = [
     {
@@ -54,8 +65,8 @@ const HospitalDetail: React.FC = () => {
         { label: "Pincode", name: "hospital_pincode" },
         { label: "Contact No", name: "hospital_contact_no" },
         { label: "Alt Contact No", name: "hospital_alt_contact_no" },
-        { label: "Service Status", name: "hospital_service_status" },
-        { label: "City", name: "hospital_city_name" },
+        { label: "Service Status", name: "hospital_service_status", render: hospitalServiceStatus},
+        { label: "City", name: "city_name" },
         {
           label: "Address",
           name: "hospital_address",
