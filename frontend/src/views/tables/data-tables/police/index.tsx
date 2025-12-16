@@ -6,14 +6,15 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.html5";
 import "@/global.css";
 
-import { TbEye } from "react-icons/tb";
+import { TbArrowRight, TbEdit, TbEye, TbReceipt } from "react-icons/tb";
 
 import jszip from "jszip";
 import pdfmake from "pdfmake";
-import { hospitalColumns } from "@/views/tables/data-tables/hospital/components/hostpital";
+import { policeColumns } from "@/views/tables/data-tables/police/components/police";
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
 import TablePagination from "@/components/table/TablePagination";
 import TableFilters from "@/components/table/TableFilters";
 import { useTableFilters } from "@/hooks/useTableFilters";
@@ -28,17 +29,20 @@ const tableConfig: Record<
   { endpoint: string; columns: any[]; headers: string[] }
 > = {
   1: {
-    endpoint: "/hospital/hospital_list",
-    columns: hospitalColumns,
+    endpoint: "/police/get_police_list",
+    columns: policeColumns,
     headers: [
-        "S.No.",
-        "ID",
-        "Picture",
-        "Name",
-        "Contact",
-        "City",
-        "Date",
-        "Status",
+      "S.No.",
+      "ID",
+      "Profile",
+      "Name",
+      "Partner ID",
+      "Created Partner",
+      "Mobile",
+      "Amount",
+      "By",
+      "Created",
+      "Status",
     ],
   },
 };
@@ -46,15 +50,15 @@ const tableConfig: Record<
 type ExportDataWithButtonsProps = {
   tabKey: number;
   refreshFlag: number;
+  onAddNew?: () => void;
   filterParams?: Record<string, any>;
-  onDataChanged?: () => void;
 };
 
 const ExportDataWithButtons = ({
   tabKey,
   refreshFlag,
+  onAddNew,
   filterParams = {},
-  onDataChanged,
 }: ExportDataWithButtonsProps) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -84,8 +88,11 @@ const ExportDataWithButtons = ({
   const { endpoint, columns, headers } = tableConfig[tabKey];
 
   const StatusFilterOptions = [
-    { label: "Verified", value: "0" },
-    { label: "Blocked", value: "1" },
+    { label: "New", value: "new" },
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inActive" },
+    { label: "Delete", value: "delete" },
+    { label: "Verification", value: "verification" },
   ];
 
   const fetchData = async () => {
@@ -95,20 +102,20 @@ const ExportDataWithButtons = ({
       const res = await axios.get(`${baseURL}${endpoint}`, { params });
       console.log("API Response:", res.data);
 
-      const hospitals = res.data?.jsonData?.hospital_lists || [];
-      setData(hospitals);
+      const police = res.data?.jsonData?.police || [];
+      setData(police);
 
       if (res.data.paginations) {
         setTotal(res.data.paginations.total);
         setTotalPages(res.data.paginations.totalPages);
       } else {
-        setTotal(res.data?.total || hospitals.length);
+        setTotal(res.data?.total || police.length);
         setTotalPages(
-          res.data?.totalPages || Math.ceil(hospitals.length / pageSize)
+          res.data?.totalPages || Math.ceil(police.length / pageSize)
         );
       }
     } catch (error) {
-      console.error("Error fetching hospital data:", error);
+      console.error("Error fetching police data:", error);
       setData([]);
       setTotal(0);
       setTotalPages(0);
@@ -155,10 +162,18 @@ const ExportDataWithButtons = ({
             <button
               className="eye-icon"
               onClick={() => {
-                navigate(`/hospital-detail/${rowData.hospital_id}`);
+                navigate(`/driver-detail/${rowData.driver_id}`);
               }}
             >
               <TbEye className="me-1" />
+            </button>
+            <button
+              className="edit-icon p-0 p-1 text-white rounded-1 d-flex align-items-center justify-content-center"
+              onClick={() => {
+                navigate(`/police/edit/${rowData.police_id}`);
+              }}
+            >
+              <TbEdit className="me-1" />
             </button>
           </div>
         );
@@ -170,7 +185,7 @@ const ExportDataWithButtons = ({
     <>
       <ComponentCard
         title={
-          <div className="w-100">{tabKey === 1 ? "Manage Hospitals" : ""}</div>
+          <div className="w-100">{tabKey === 1 ? "Manage Drivers" : ""}</div>
         }
         className="mb-2"
         headerActions={
@@ -185,6 +200,12 @@ const ExportDataWithButtons = ({
               statusOptions={StatusFilterOptions}
               className="w-100"
             />
+            <button
+              className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 text-nowrap"
+              onClick={onAddNew}
+            >
+              Add New <TbArrowRight className="fs-5" />
+            </button>
           </div>
         }
       >
@@ -193,7 +214,7 @@ const ExportDataWithButtons = ({
         ) : (
           <div className="overflow-x-auto ">
             <DataTable
-              key={`hospital-table-${tabKey}-${dateFilter}-${statusFilter}-${dateRange}-${currentPage}`}
+              key={`driver-table-${tabKey}-${dateFilter}-${statusFilter}-${dateRange}-${currentPage}`}
               data={data}
               columns={columnsWithActions}
               options={{

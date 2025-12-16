@@ -66,8 +66,6 @@ const ExportDataWithButtons = ({
 }: ExportDataWithButtonsProps) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isRemarkOpen, setIsRemarkOpen] = useState(false);
-  const [selectedDriverId, setSelectedDriverId] = useState<number | null>(null);
 
   const [pageSize] = useState(10);
   const [_total, setTotal] = useState(0);
@@ -130,17 +128,6 @@ const ExportDataWithButtons = ({
     }
   };
 
-  const handleRemark = (rowData: any) => {
-    const id = rowData?.driver_id;
-    setSelectedDriverId(id);
-    setIsRemarkOpen(true);
-  };
-
-  const handleRemarkSuccess = () => {
-    fetchData();
-    onDataChanged?.();
-  };
-
   useEffect(() => {
     fetchData();
   }, [
@@ -183,20 +170,6 @@ const ExportDataWithButtons = ({
             >
               <TbEye className="me-1" />
             </button>
-            <button
-              className="edit-icon p-0 p-1 text-white rounded-1 d-flex align-items-center justify-content-center"
-              onClick={() => {
-                navigate(`/edit-driver/${rowData.driver_id}`);
-              }}
-            >
-              <TbEdit className="me-1" />
-            </button>
-            <button
-              className="remark-icon"
-              onClick={() => handleRemark(rowData)}
-            >
-              <TbReceipt className="me-1" />
-            </button>
           </div>
         );
       },
@@ -222,12 +195,6 @@ const ExportDataWithButtons = ({
               statusOptions={StatusFilterOptions}
               className="w-100"
             />
-            <button
-              className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 text-nowrap"
-              onClick={onAddNew}
-            >
-              Add New <TbArrowRight className="fs-5" />
-            </button>
           </div>
         }
       >
@@ -301,14 +268,6 @@ const ExportDataWithButtons = ({
           </div>
         )}
       </ComponentCard>
-
-      <AddRemark
-        isOpen={isRemarkOpen}
-        onClose={() => setIsRemarkOpen(false)}
-        remarkCategoryType={REMARK_CATEGORY_TYPES.DRIVER}
-        primaryKeyId={selectedDriverId}
-        onSuccess={handleRemarkSuccess}
-      />
     </>
   );
 };

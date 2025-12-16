@@ -10,7 +10,6 @@ type HospitalInfoType = {
     hospital_city_name: number
     hospital_added_timestamp: string
     hospital_status: string
-    remark_text: string
 }
 
 type TableType<T> = {
@@ -48,7 +47,6 @@ export const hospitalColumns = [
             return formatDate(data) || ' ';
         }
     },
-    { data: 'remark_text' },
     {
         data: 'hospital_status',
         render: (data: string) => {
@@ -65,6 +63,6 @@ export const hospitalColumns = [
 
 // Export table data structure
 export const hospitalTableData: TableType<HospitalInfoType> = {
-    header: ['S.No.', 'ID', 'Picture', 'Name', 'Contact', 'City', 'Date', 'Remarks', 'Status'],
+    header: ['S.No.', 'ID', 'Picture', 'Name', 'Contact', 'City', 'Date', 'Status'],
     body: hospitalRows,
 };

@@ -2,19 +2,13 @@ import { useLayoutContext } from "@/context/useLayoutContext";
 // import CustomizerToggler from "@/layouts/components/topbar/components/CustomizerToggler";
 // import LanguageDropdown from "@/layouts/components/topbar/components/LanguageDropdown";
 // import MegaMenu from "@/layouts/components/topbar/components/MegaMenu";
-import NotificationDropdown from "@/layouts/components/topbar/components/NotificationDropdown";
 import ThemeToggler from "@/layouts/components/topbar/components/ThemeToggler";
 import UserProfile from "@/layouts/components/topbar/components/UserProfile";
 import { Link } from "react-router";
 import {
   Container,
-//   Dropdown,
-//   DropdownItem,
-//   DropdownMenu,
-//   DropdownToggle,
-  FormControl,
 } from "react-bootstrap";
-import { LuMenu, LuSearch, LuSparkles } from "react-icons/lu";
+import { LuMenu, LuSparkles } from "react-icons/lu";
 
 import logoSm from "@/assets/images/logo-sm.png";
 

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import DetailPage from "@/components/DetailPage";
 import { Card } from "react-bootstrap";
-import { formatDate } from "@/components/DateFormat";
 
 const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
@@ -36,6 +35,7 @@ const HospitalDetail: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!hospital) return <div>No hospital data found</div>;
 
+  // ...existing code...
   const sections = [
     {
       title: "Basic Info",
@@ -44,7 +44,8 @@ const HospitalDetail: React.FC = () => {
         { label: "User ID", name: "hospital_user_id" },
         { label: "Hospital Name", name: "hospital_name" },
         // { label: "Name SKU", name: "hospital_name_sku" },
-        { label: "Logo", name: "hospital_logo", type: "image" },
+        // removed unsupported type "image" to satisfy FieldConfig union
+        { label: "Logo", name: "hospital_logo" },
       ],
     },
     {
@@ -121,7 +122,9 @@ const HospitalDetail: React.FC = () => {
               {hospital?.hospital_id || "N/A"}
             </strong>
           </div>
-          <div className="h5 mb-0 fs-4 fw-semibold">{hospital?.hospital_name ?? "N/A"}</div>
+          <div className="h5 mb-0 fs-4 fw-semibold">
+            {hospital?.hospital_name ?? "N/A"}
+          </div>
         </Card.Body>
       </Card>
 

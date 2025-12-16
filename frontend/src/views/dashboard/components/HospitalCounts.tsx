@@ -2,13 +2,12 @@ import {Card, CardBody, CardFooter, ProgressBar} from 'react-bootstrap'
 import {LuUsers} from 'react-icons/lu'
 import CountUp from "react-countup";
 import React from 'react'
-import axios from 'axios';
 
 const ActiveUsers = () => {
 
-    const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
+    // const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
-    const [vendors, setVendors] = React.useState({
+    const [vendors, _setVendors] = React.useState({
         today_new_vendors: 5,
         active_vendors: 5,
         other_status_vendors: 10,
@@ -33,7 +32,7 @@ const ActiveUsers = () => {
         fetchVendorCounst();
     }, [])
 
-    const { today_new_vendors, active_vendors, other_status_vendors, total_vendors } = vendors;
+    const {  active_vendors, other_status_vendors, total_vendors } = vendors;
 
     if (isLoading) {
         return (

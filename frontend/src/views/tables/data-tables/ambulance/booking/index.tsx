@@ -98,28 +98,18 @@ const tableConfig: Record<number, { endpoint: string; headers: string[] }> = {
 type ExportDataWithButtonsProps = {
   tabKey: number;
   refreshFlag: number;
-  onAddNew: () => void;
-  onEditRow?: (rowData: any) => void;
-  onDataChanged?: () => void;
   filterParams?: Record<string, any>;
 };
 
 const ExportDataWithButtons = ({
   tabKey,
   refreshFlag,
-  onAddNew,
-  // onEditRow,
-  onDataChanged,
   filterParams = {},
 }: ExportDataWithButtonsProps) => {
   const navigate = useNavigate();
   const [tableData, setTableData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const tableRef = useRef<any>(null);
-  const [selectedConsumerId, setSelectedConsumerId] = useState<number | null>(
-    null
-  );
-  const [isRemarkOpen, setIsRemarkOpen] = useState(false);
 
   const [pageSize] = useState(10);
   const [_total, setTotal] = useState(0);
@@ -214,17 +204,6 @@ const ExportDataWithButtons = ({
     dateRange,
   ]);
 
-  const handleRemark = (rowData: any) => {
-    const id = rowData?.booking_id;
-    setSelectedConsumerId(id);
-    setIsRemarkOpen(true);
-  };
-
-  const handleRemarkSuccess = () => {
-    fetchData();
-    onDataChanged?.();
-  };
-
   const columnsWithActions = [
     ...bookingColumns,
     {
@@ -245,12 +224,6 @@ const ExportDataWithButtons = ({
               }}
             >
               <TbEye className="me-1" />
-            </button>
-            <button
-              className="remark-icon"
-              onClick={() => handleRemark(rowData)}
-            >
-              <TbReceipt className="me-1" />
             </button>
           </div>
         );
@@ -292,14 +265,6 @@ const ExportDataWithButtons = ({
               dateRangePlaceholder="Custom date range"
               statusFilterPlaceholder="Status"
             />
-            {tabKey === 1 && (
-              <button
-                className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
-                onClick={onAddNew}
-              >
-                Add New <TbArrowRight className="fs-5" />
-              </button>
-            )}
           </div>
         }
       >
@@ -373,14 +338,6 @@ const ExportDataWithButtons = ({
           </div>
         )}
       </ComponentCard>
-
-      <AddRemark
-        isOpen={isRemarkOpen}
-        onClose={() => setIsRemarkOpen(false)}
-        remarkCategoryType={REMARK_CATEGORY_TYPES.AMBULANCE_BOOKING}
-        primaryKeyId={selectedConsumerId}
-        onSuccess={handleRemarkSuccess}
-      />
     </>
   );
 };

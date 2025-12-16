@@ -6,10 +6,7 @@ import Partner from "./components/Partner";
 import Vehicle from "./components/Vehicle";
 import DriverTransaction from "./components/DriverTransaction";
 import PartnerTransaction from "./components/PartnerTransaction";
-import TotalBookingCount from "@/views/dashboard/components/TotalBookingCount";
 import TotalActiveOtherStatusVendor from "@/views/dashboard/components/PoliceCounts";
-import TotalCancelOngoingBooking from "@/views/dashboard/components/TotalCancelOngoingBookingCounts";
-import GetConsumerCounts from "@/views/dashboard/components/GetConsumerCounts";
 import RequestStatistics from "@/views/dashboard/components/RequestStatistics";
 import CountsDashboard from "./components/CountsDashboard";
 
@@ -42,21 +39,11 @@ const Page = () => {
       {activeTab === 1 && (
         <>
           <Row className="row-cols-xxl-4 row-cols-md-2 row-cols-1">
-            <Col>
-              <TotalBookingCount />
-            </Col>
 
             <Col>
               <TotalActiveOtherStatusVendor />
             </Col>
 
-            <Col>
-              <TotalCancelOngoingBooking />
-            </Col>
-
-            <Col>
-              <GetConsumerCounts />
-            </Col>
           </Row>
 
           <Row>

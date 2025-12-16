@@ -1,19 +1,19 @@
 import SimpleBar from 'simplebar-react'
-import {useLayoutContext} from '@/context/useLayoutContext'
+// import {useLayoutContext} from '@/context/useLayoutContext'
 import AppMenu from '@/layouts/components/sidenav/components/AppMenu'
 import UserProfile from '@/layouts/components/sidenav/components/UserProfile'
-import {LuSquareChevronLeft} from 'react-icons/lu'
+// import {LuSquareChevronLeft} from 'react-icons/lu'
 
 const Sidenav = () => {
-    const {sidenav, changeSideNavSize} = useLayoutContext()
+    // const {sidenav, changeSideNavSize} = useLayoutContext()
 
-    const handleCollapse = () => {
-        if (sidenav.size === 'default') {
-            changeSideNavSize('collapse')
-            return
-        }
-        changeSideNavSize('default')
-    }
+    // const handleCollapse = () => {
+    //     if (sidenav.size === 'default') {
+    //         changeSideNavSize('collapse')
+    //         return
+    //     }
+    //     changeSideNavSize('default')
+    // }
 
     return (
         <div className="sidenav-menu">
