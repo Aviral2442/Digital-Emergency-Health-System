@@ -6,7 +6,7 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.html5";
 import "@/global.css";
 
-import { TbArrowRight, TbEdit, TbEye, TbReceipt } from "react-icons/tb";
+import { TbArrowRight, TbEdit, TbEye } from "react-icons/tb";
 
 import jszip from "jszip";
 import pdfmake from "pdfmake";
@@ -14,7 +14,6 @@ import { policeColumns } from "@/views/tables/data-tables/police/components/poli
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
 import TablePagination from "@/components/table/TablePagination";
 import TableFilters from "@/components/table/TableFilters";
 import { useTableFilters } from "@/hooks/useTableFilters";
@@ -162,7 +161,7 @@ const ExportDataWithButtons = ({
             <button
               className="eye-icon"
               onClick={() => {
-                navigate(`/driver-detail/${rowData.driver_id}`);
+                navigate(`/police-detail/${rowData.police_id}`);
               }}
             >
               <TbEye className="me-1" />

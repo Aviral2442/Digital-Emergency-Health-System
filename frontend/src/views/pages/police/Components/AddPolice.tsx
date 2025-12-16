@@ -474,7 +474,6 @@
 
 
 
-import React from 'react'
 
 const AddPolice = () => {
   return (

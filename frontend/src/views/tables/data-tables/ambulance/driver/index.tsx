@@ -6,7 +6,7 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.html5";
 import "@/global.css";
 
-import { TbArrowRight, TbEdit, TbEye, TbReceipt } from "react-icons/tb";
+import { TbEye } from "react-icons/tb";
 
 import jszip from "jszip";
 import pdfmake from "pdfmake";
@@ -14,7 +14,6 @@ import { driverColumns } from "@/views/tables/data-tables/ambulance/driver/compo
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
 import TablePagination from "@/components/table/TablePagination";
 import TableFilters from "@/components/table/TableFilters";
 import { useTableFilters } from "@/hooks/useTableFilters";
@@ -60,9 +59,7 @@ type ExportDataWithButtonsProps = {
 const ExportDataWithButtons = ({
   tabKey,
   refreshFlag,
-  onAddNew,
   filterParams = {},
-  onDataChanged,
 }: ExportDataWithButtonsProps) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);

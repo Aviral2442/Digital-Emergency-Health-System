@@ -43,6 +43,7 @@ const HospitalList = lazy(() => import('@/views/pages/hospital'))
 const HospitalDetail = lazy(() => import('@/views/pages/hospital/HospitalDetail'))
 const PoliceList = lazy(() => import('@/views/pages/police')) 
 const PoliceAdd = lazy(() => import('@/views/pages/police/Components/AddPolice'))
+const PoliceDetail = lazy(() => import('@/views/pages/police/PoliceDetail'))
 
 //amblulance Pages
 const AmbulanceList = lazy(() => import('@/views/pages/ambulance/category'))
@@ -178,7 +179,7 @@ const pagesRoutes: RouteObject[] = [
   { path: "/police", element: <PoliceList/> },
   { path: "/police/add", element: <PoliceAdd/> },
   { path: "/police/edit/:id", element: <PoliceAdd/> },
-  
+  { path: "/police-detail/:id", element: <PoliceDetail/> },
   //ambulance Pages
   { path: "/ambulance/partner", element: <PartnerList/> },
   { path: "/ambulance/add-driver", element: <AddDriver/> },

@@ -6,7 +6,7 @@ import DataTable from "datatables.net-react";
 import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.html5";
 
-import { TbArrowRight, TbEye, TbReceipt } from "react-icons/tb";
+import { TbEye } from "react-icons/tb";
 import jszip from "jszip";
 import pdfmake from "pdfmake";
 import axios from "axios";
@@ -18,7 +18,6 @@ import _pdfFonts from "pdfmake/build/vfs_fonts";
 import _pdfMake from "pdfmake/build/pdfmake";
 import { bookingColumns } from "./components/booking";
 import { createRoot } from "react-dom/client";
-import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
 
 DataTable.use(DT);
 DT.Buttons.jszip(jszip);

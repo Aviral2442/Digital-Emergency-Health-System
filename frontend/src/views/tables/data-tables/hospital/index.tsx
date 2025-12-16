@@ -54,7 +54,6 @@ const ExportDataWithButtons = ({
   tabKey,
   refreshFlag,
   filterParams = {},
-  onDataChanged,
 }: ExportDataWithButtonsProps) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
