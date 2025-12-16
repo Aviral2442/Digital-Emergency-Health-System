@@ -177,3 +177,27 @@ export const addPoliceService = async (policeData: PoliceData) => {
         throw new ApiError(500, 'Failed to add police');
     }
 };
+
+// FETCH POLICE BY ID SERVICE
+export const fetchPoliceByIdService = async (police_id: number) => {
+    try {
+        const query = `SELECT * FROM police WHERE police_id = ?`;
+
+        const [rows]: any = await db.query(query, [police_id]);
+
+        if (rows.length > 0) {
+            return {
+                status: 200,
+                message: 'Police fetched successfully',
+                jsonData: {
+                    police: rows[0]
+                }
+            }
+        } else {
+            throw new ApiError(404, 'Police not found');
+        }
+
+    } catch (error) {
+        throw new ApiError(500, 'Failed to fetch police by ID');
+    }
+};
