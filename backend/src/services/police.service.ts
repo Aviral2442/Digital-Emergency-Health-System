@@ -124,6 +124,7 @@ export const getPoliceListService = async (filters: {
 
 };
 
+// POLICE DATA INTERFACE
 interface PoliceData {
     police_name: string;
     police_last_name: string;
@@ -199,5 +200,42 @@ export const fetchPoliceByIdService = async (police_id: number) => {
 
     } catch (error) {
         throw new ApiError(500, 'Failed to fetch police by ID');
+    }
+};
+
+// UPDATE POLICE SERVICE
+export const updatePoliceService = async (police_id: number, updateData: PoliceData) => {
+    try {
+
+        const updateData: any = {};
+
+        if (updateData.police_name) updateData.police_name = updateData.police_name;
+        if (updateData.police_last_name) updateData.police_last_name = updateData.police_last_name;
+        if (updateData.police_mobile) updateData.police_mobile = updateData.police_mobile;
+        if (updateData.police_dob) {
+            const t = Math.floor(new Date(updateData.police_dob).getTime() / 1000);
+            updateData.police_dob = Number.isFinite(t) && t > 0 ? t : null;
+        }
+        if (updateData.police_gender) updateData.police_gender = updateData.police_gender;
+        if (updateData.police_city_id) updateData.police_city_id = updateData.police_city_id;
+        if (updateData.police_created_by) updateData.police_created_by = updateData.police_created_by;
+        if (updateData.police_created_partner_id) updateData.police_created_partner_id = updateData.police_created_partner_id;
+        if (updateData.police_profile_img) {
+            const police_profile = uploadFileCustom(updateData.police_profile_img, "/police");
+            updateData.police_profile_img = police_profile;
+        }
+        updateData.updated_at = currentUnixTime();
+
+        const query = `UPDATE police SET ? WHERE police_id = ?`;
+
+        await db.query(query, [updateData, police_id]);
+
+        return {
+            status: 200,
+            message: 'Police updated successfully',
+        };
+
+    } catch (error) {
+        throw new ApiError(500, 'Failed to update police');
     }
 };
