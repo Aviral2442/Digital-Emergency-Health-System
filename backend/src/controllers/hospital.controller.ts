@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { getHospitalListService } from '../services/hospital.service';
+import { getHospitalListService, hospitalAllDataService } from '../services/hospital.service';
 
 // HOSPITAL LIST CONTROLLER
 export const getHospitalListController = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +18,17 @@ export const getHospitalListController = async (req: Request, res: Response, nex
         const result = await getHospitalListService(filters);
         res.status(200).json(result);
 
+    } catch (error) {
+        next(error);
+    }
+};
+
+// HOSPITAL ALL DATA CONTROLLER
+export const hospitalAllDataController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const hospital_id = parseInt(req.params.hospital_id);
+        const result = await hospitalAllDataService(hospital_id);
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }

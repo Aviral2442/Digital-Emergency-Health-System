@@ -122,3 +122,25 @@ export const getHospitalListService = async (filters: {
     }
 
 };
+
+// HOSPITAL ALL DATA SERVICE
+export const hospitalAllDataService = async (hospital_id: number) => {
+    try {
+        const query = `
+            SELECT hospital_lists.*, hospital_users.hospital_users_name, hospital_users.hospital_users_mobile FROM hospital_lists
+            LEFT JOIN hospital_users ON hospital_lists.hospital_user_id = hospital_users.hospital_users_id
+            WHERE hospital_id = ?;
+        `;
+        const [rows]: any = await db.query(query, [hospital_id]);
+        if (rows.length === 0) {
+            throw new ApiError(404, 'Hospital not found');
+        }
+        return {
+            status: 200,
+            message: 'Hospital Data Fetch Successful',
+            jsonData: rows[0]
+        };
+    } catch (error) {
+        throw new ApiError(500, 'Failed to retrieve hospital data');
+    }
+};
