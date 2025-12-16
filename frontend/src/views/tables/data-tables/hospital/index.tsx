@@ -1,45 +1,46 @@
 import { useEffect, useState } from "react";
 import ComponentCard from "@/components/ComponentCard";
-import '@/global.css';
 import DT from "datatables.net-bs5";
 import DataTable from "datatables.net-react";
 import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.html5";
-import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
+import "@/global.css";
 
-import { TbEye, TbReceipt } from "react-icons/tb";
+import { TbEdit, TbEye, TbReceipt } from "react-icons/tb";
 
 import jszip from "jszip";
 import pdfmake from "pdfmake";
-import { bookingColumns } from "@/views/tables/data-tables/manpower/booking/booking/bookings";
+import { hospitalColumns } from "@/views/tables/data-tables/hospital/components/hostpital";
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
 import TablePagination from "@/components/table/TablePagination";
 import TableFilters from "@/components/table/TableFilters";
 import { useTableFilters } from "@/hooks/useTableFilters";
 
+// Register DataTable plugins
+DataTable.use(DT);
+DT.Buttons.jszip(jszip);
+DT.Buttons.pdfMake(pdfmake);
+
 const tableConfig: Record<
   number,
-  {
-    endpoint: string;
-    columns: any[];
-    headers: string[];
-  }
+  { endpoint: string; columns: any[]; headers: string[] }
 > = {
   1: {
-    endpoint: "/booking/get_bookings",
-    columns: bookingColumns,
+    endpoint: "/hospital/hospital_list",
+    columns: hospitalColumns,
     headers: [
-      "S.No.",
-      "id",
-      "name",
-      "mobile",
-      "address",
-      "Price",
-      "date",
-      "Remark",
-      "status",
+        "S.No.",
+        "ID",
+        "Picture",
+        "Name",
+        "Contact",
+        "City",
+        "Date",
+        "Remarks",
+        "Status",
     ],
   },
 };
@@ -48,12 +49,8 @@ type ExportDataWithButtonsProps = {
   tabKey: number;
   refreshFlag: number;
   filterParams?: Record<string, any>;
-  onDataChanged: () => void;
+  onDataChanged?: () => void;
 };
-
-DataTable.use(DT);
-DT.Buttons.jszip(jszip);
-DT.Buttons.pdfMake(pdfmake);
 
 const ExportDataWithButtons = ({
   tabKey,
@@ -61,12 +58,10 @@ const ExportDataWithButtons = ({
   filterParams = {},
   onDataChanged,
 }: ExportDataWithButtonsProps) => {
-  const [rows, setRows] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [isRemarkOpen, setIsRemarkOpen] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState<number | null>(
-    null
-  );
+  const [selectedHospitalId, setSelectedHospitalId] = useState<number | null>(null);
 
   const [pageSize] = useState(10);
   const [_total, setTotal] = useState(0);
@@ -93,10 +88,8 @@ const ExportDataWithButtons = ({
   const { endpoint, columns, headers } = tableConfig[tabKey];
 
   const StatusFilterOptions = [
-    { label: "New", value: "1" },
-    { label: "Ongoing", value: "2" },
-    { label: "Canceled", value: "3" },
-    { label: "Completed", value: "4" },
+    { label: "Verified", value: "0" },
+    { label: "Blocked", value: "1" },
   ];
 
   const fetchData = async () => {
@@ -104,22 +97,23 @@ const ExportDataWithButtons = ({
     try {
       const params = getFilterParams(pageSize, filterParams);
       const res = await axios.get(`${baseURL}${endpoint}`, { params });
-      console.log("Fetched data:", res.data);
+      console.log("API Response:", res.data);
 
-      switch (tabKey) {
-        case 1:
-          setRows(res.data?.jsonData?.bookingsLists || []);
-          setTotal(res.data?.pagination?.total || 0);
-          setTotalPages(res.data?.pagination?.totalPages || 0);
-          break;
-        default:
-          setRows(res.data.remark || []);
-          setTotal(res.data?.total || 0);
-          setTotalPages(res.data?.totalPages || 0);
+      const hospitals = res.data?.jsonData?.hospital_lists || [];
+      setData(hospitals);
+
+      if (res.data.paginations) {
+        setTotal(res.data.paginations.total);
+        setTotalPages(res.data.paginations.totalPages);
+      } else {
+        setTotal(res.data?.total || hospitals.length);
+        setTotalPages(
+          res.data?.totalPages || Math.ceil(hospitals.length / pageSize)
+        );
       }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setRows([]);
+    } catch (error) {
+      console.error("Error fetching hospital data:", error);
+      setData([]);
       setTotal(0);
       setTotalPages(0);
     } finally {
@@ -127,19 +121,9 @@ const ExportDataWithButtons = ({
     }
   };
 
-  const handleView = (rowData: any) => {
-    const id =
-      rowData?.manpower_order_id ?? rowData?.mpo_order_id ?? rowData?.id;
-    if (id !== undefined && id !== null) {
-      navigate(`/manpower/booking/details/${id}`);
-    } else {
-      console.warn("No id found for row", rowData);
-    }
-  };
-
   const handleRemark = (rowData: any) => {
-    const id = rowData?.manpower_order_id ?? rowData?.mpo_order_id ?? rowData?.id;
-    setSelectedBookingId(id);
+    const id = rowData?.hospital_id;
+    setSelectedHospitalId(id);
     setIsRemarkOpen(true);
   };
 
@@ -183,9 +167,9 @@ const ExportDataWithButtons = ({
         root.render(
           <div className="d-flex flex-row gap-1">
             <button
-              className="eye-icon p-1"
+              className="eye-icon"
               onClick={() => {
-                handleView(rowData);
+                navigate(`/hospital-detail/${rowData.hospital_id}`);
               }}
             >
               <TbEye className="me-1" />
@@ -205,27 +189,32 @@ const ExportDataWithButtons = ({
   return (
     <>
       <ComponentCard
-        title={tabKey === 1 ? "Manage Booking" : ""}
-        className="mb-4 overflow-x-auto"
+        title={
+          <div className="w-100">{tabKey === 1 ? "Manage Hospitals" : ""}</div>
+        }
+        className="mb-2"
         headerActions={
-          <TableFilters
-            dateFilter={dateFilter}
-            statusFilter={statusFilter}
-            dateRange={dateRange}
-            onDateFilterChange={handleDateFilterChange}
-            onStatusFilterChange={handleStatusFilterChange}
-            onDateRangeChange={handleDateRangeChange}
-            statusOptions={StatusFilterOptions}
-          />
+          <div className="d-flex gap-2 align-items-center">
+            <TableFilters
+              dateFilter={dateFilter}
+              statusFilter={statusFilter}
+              dateRange={dateRange}
+              onDateFilterChange={handleDateFilterChange}
+              onStatusFilterChange={handleStatusFilterChange}
+              onDateRangeChange={handleDateRangeChange}
+              statusOptions={StatusFilterOptions}
+              className="w-100"
+            />
+          </div>
         }
       >
         {loading ? (
-          <div className="text-center p-4">Loading...</div>
+          <div className="text-center py-4">Loading...</div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ">
             <DataTable
-              key={`booking-table-${tabKey}-${dateFilter}-${statusFilter}-${dateRange}-${currentPage}`}
-              data={rows}
+              key={`hospital-table-${tabKey}-${dateFilter}-${statusFilter}-${dateRange}-${currentPage}`}
+              data={data}
               columns={columnsWithActions}
               options={{
                 responsive: true,
@@ -237,15 +226,25 @@ const ExportDataWithButtons = ({
                   topStart: "buttons",
                 },
                 buttons: [
-                  { extend: "copy", className: "btn btn-sm btn-secondary" },
                   {
-                    extend: "csv",
-                    className: "btn btn-sm btn-secondary active",
+                    extend: "copyHtml5",
+                    className: "btn btn-sm btn-primary",
+                    text: "Copy",
                   },
-                  { extend: "excel", className: "btn btn-sm btn-secondary" },
                   {
-                    extend: "pdf",
-                    className: "btn btn-sm btn-secondary active",
+                    extend: "excelHtml5",
+                    className: "btn btn-sm btn-primary",
+                    text: "Excel",
+                  },
+                  {
+                    extend: "csvHtml5",
+                    className: "btn btn-sm btn-primary",
+                    text: "CSV",
+                  },
+                  {
+                    extend: "pdfHtml5",
+                    className: "btn btn-sm btn-primary",
+                    text: "PDF",
                   },
                 ],
               }}
@@ -253,19 +252,16 @@ const ExportDataWithButtons = ({
             >
               <thead className="thead-sm text-capitalize fs-xxs">
                 <tr>
-                  {headers.map((col, idx) => (
-                    <th key={idx}>{col}</th>
+                  {headers.map((header, idx) => (
+                    <th key={idx}>{header}</th>
                   ))}
-                  <th>Actions</th>
+                  {/* <th>Actions</th> */}
                 </tr>
               </thead>
             </DataTable>
 
             <TablePagination
-              // totalItems={total}
               start={currentPage + 1}
-              // end={totalPages}
-              // itemsName="items"
               showInfo={true}
               previousPage={() =>
                 handlePageChange(Math.max(0, currentPage - 1))
@@ -286,12 +282,13 @@ const ExportDataWithButtons = ({
       <AddRemark
         isOpen={isRemarkOpen}
         onClose={() => setIsRemarkOpen(false)}
-        remarkCategoryType={REMARK_CATEGORY_TYPES.MANPOWER_ORDER}
-        primaryKeyId={selectedBookingId}
+        remarkCategoryType={REMARK_CATEGORY_TYPES.HOSPITAL}
+        primaryKeyId={selectedHospitalId}
         onSuccess={handleRemarkSuccess}
       />
     </>
   );
 };
 
+// Export the component directly, not wrapped in another component
 export default ExportDataWithButtons;

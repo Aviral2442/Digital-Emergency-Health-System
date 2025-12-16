@@ -40,6 +40,7 @@ const DriverDetails = lazy(() => import('@/views/pages/ambulance/driver/DriverDe
 const AmbulanceBooking = lazy(() => import('@/views/pages/ambulance/booking'))
 const AmbulanceBookingDetails = lazy(() => import('@/views/pages/ambulance/booking/BookingDetails'));
 const HospitalList = lazy(() => import('@/views/pages/hospital'))
+const HospitalDetail = lazy(() => import('@/views/pages/hospital/HospitalDetail'))
 const PoliceList = lazy(() => import('@/views/pages/police')) 
 
 //amblulance Pages
@@ -172,6 +173,7 @@ const pagesRoutes: RouteObject[] = [
   { path: "/driver", element: <DriverList/> },
   { path: "/booking", element: <AmbulanceBooking/> },
   { path: "/hospital", element: <HospitalList/> },
+  { path: "/hospital-detail/:id", element: <HospitalDetail/> },
   { path: "/police", element: <PoliceList/> },
   
   //ambulance Pages
