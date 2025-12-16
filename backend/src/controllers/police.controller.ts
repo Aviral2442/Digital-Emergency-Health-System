@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { getPoliceListService } from '../services/police.service';
+import { addPoliceService, getPoliceListService } from '../services/police.service';
 
 // POLICE LIST CONTROLLER
 export const getPoliceListController = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,6 +15,25 @@ export const getPoliceListController = async (req: Request, res: Response, next:
         };
         const result = await getPoliceListService(filters);
         res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// ADD POLICE CONTROLLER
+export const addPoliceController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const files = req.file;
+        const body = req.body;
+
+        const data = {
+            ...body,
+            police_profile_img: files,
+        };
+
+        const response = await addPoliceService(data);
+        return res.status(response.status).json(response);
+
     } catch (error) {
         next(error);
     }

@@ -2,6 +2,7 @@ import { db } from '../config/db';
 import { ApiError } from '../utils/api-error';
 import { buildFilters } from '../utils/filters';
 import { currentUnixTime } from '../utils/current_unixtime';
+import { uploadFileCustom } from '../utils/file_uploads';
 
 // POLICE LIST SERVICE
 export const getPoliceListService = async (filters: {
@@ -121,4 +122,58 @@ export const getPoliceListService = async (filters: {
         throw new ApiError(500, 'Failed to retrieve drivers services');
     }
 
+};
+
+interface PoliceData {
+    police_name: string;
+    police_last_name: string;
+    police_mobile: number;
+    police_dob: string;
+    police_gender: string;
+    police_city_id: number;
+    police_created_by: number;
+    police_created_partner_id: number;
+    police_profile_img?: Express.Multer.File | null;
+}
+
+// ADD POLICE SERVICE
+export const addPoliceService = async (policeData: PoliceData) => {
+    try {
+
+        let dobTimestamp: number | null = null;
+        if (policeData.police_dob) {
+            const t = Math.floor(new Date(policeData.police_dob).getTime() / 1000);
+            dobTimestamp = Number.isFinite(t) && t > 0 ? t : null;
+        }
+
+        const police_profile = policeData.police_profile_img ? uploadFileCustom(policeData.police_profile_img, "/police") : null;
+
+        const insertPoliceData: any = {
+            police_name: policeData.police_name,
+            police_last_name: policeData.police_last_name,
+            police_mobile: policeData.police_mobile,
+            police_dob: dobTimestamp,
+            police_gender: policeData.police_gender,
+            police_city_id: policeData.police_city_id,
+            police_created_by: policeData.police_created_by,
+            police_created_partner_id: policeData.police_created_partner_id,
+            police_profile_img: police_profile,
+            created_at: currentUnixTime(),
+        }
+
+        const query = `
+            INSERT INTO police SET ?
+        `;
+
+        await db.query(query, insertPoliceData);
+
+        return {
+            status: 201,
+            message: 'Police added successfully',
+        };
+
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(500, 'Failed to add police');
+    }
 };
