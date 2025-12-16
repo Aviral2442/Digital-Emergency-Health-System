@@ -239,3 +239,20 @@ export const updatePoliceService = async (police_id: number, updateData: PoliceD
         throw new ApiError(500, 'Failed to update police');
     }
 };
+
+// UPDATE POLICE STATUS SERVICE
+export const updatePoliceStatusService = async (police_id: number, police_status: number) => {
+    try {
+
+        const query = `UPDATE police SET police_status = ? WHERE police_id = ?`;
+        await db.query(query, [police_status, police_id]);
+
+        return {
+            status: 200,
+            message: 'Police status updated successfully',
+        };
+
+    } catch (error) {
+        throw new ApiError(500, 'Failed to update police status');
+    }
+};

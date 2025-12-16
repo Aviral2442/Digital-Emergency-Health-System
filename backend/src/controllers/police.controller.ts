@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { addPoliceService, fetchPoliceByIdService, getPoliceListService, updatePoliceService } from '../services/police.service';
+import { addPoliceService, fetchPoliceByIdService, getPoliceListService, updatePoliceService, updatePoliceStatusService } from '../services/police.service';
 
 // POLICE LIST CONTROLLER
 export const getPoliceListController = async (req: Request, res: Response, next: NextFunction) => {
@@ -68,6 +68,21 @@ export const updatePoliceController = async (req: Request, res: Response, next: 
         };
 
         const response = await updatePoliceService(policeId, data);
+        return res.status(response.status).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// UPDATE POLICE STATUS CONTROLLER
+export const updatePoliceStatusController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (!req.params.police_id) {
+            return res.status(400).json({ message: 'Police ID is required' });
+        }
+        const policeId = parseInt(req.params.police_id);
+        const { police_status } = req.body;
+        const response = await updatePoliceStatusService(policeId, police_status);
         return res.status(response.status).json(response);
     } catch (error) {
         next(error);
