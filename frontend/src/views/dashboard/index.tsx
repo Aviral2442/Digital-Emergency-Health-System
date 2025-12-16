@@ -9,25 +9,25 @@ const Page = () => {
     return (
         <Container fluid className='mt-3'>
 
-            <Row className="row-cols-xxl-4 row-cols-md-2 row-cols-1">
-                <Col>
+            <Row className="g-3">
+                <Col xxl={3} md={6}>
                     <PoliceCounts/>
                 </Col>
 
-                <Col>
+                <Col xxl={3} md={6}>
                     <BookingCounts/>
                 </Col>  
 
-                <Col>
+                <Col xxl={3} md={6}>
                     <DriverCounts/>
                 </Col>
 
-                <Col>
+                <Col xxl={3} md={6}>
                     <HospitalCounts/>
                 </Col>
             </Row>
 
-            <Row>
+            <Row className="mt-3">
                 <Col cols={12}>
                     <RequestStatistics/>
                 </Col>

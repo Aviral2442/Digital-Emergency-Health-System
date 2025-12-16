@@ -38,15 +38,25 @@ const HospitalDetail: React.FC = () => {
   const hospitalServiceStatus = () => {
     switch (hospital?.hospital_service_status) {
       case "0":
-        return "Inactive";
+        return "Available 24/7 Service";
       case "1":
-        return "Active";
+        return "Not available";
       default:
         return "Unknown";
     }
-  }
+  };
 
-  // ...existing code...
+  const hospitalStatus = () => {
+    switch (hospital?.hospital_status) {
+      case "0":
+        return "Verified";
+      case "1":
+        return "Blocked";
+      default:
+        return "Unknown";
+    }
+  };
+
   const sections = [
     {
       title: "Basic Info",
@@ -65,7 +75,11 @@ const HospitalDetail: React.FC = () => {
         { label: "Pincode", name: "hospital_pincode" },
         { label: "Contact No", name: "hospital_contact_no" },
         { label: "Alt Contact No", name: "hospital_alt_contact_no" },
-        { label: "Service Status", name: "hospital_service_status", render: hospitalServiceStatus},
+        {
+          label: "Service Status",
+          name: "hospital_service_status",
+          render: hospitalServiceStatus,
+        },
         { label: "City", name: "city_name" },
         {
           label: "Address",
@@ -90,7 +104,11 @@ const HospitalDetail: React.FC = () => {
           name: "hospital_added_timestamp",
           type: "datetime-local",
         },
-        { label: "Status", name: "hospital_status" },
+        { 
+          label: "Status", 
+          name: "hospital_status",
+          render: hospitalStatus,
+        },
       ],
     },
     {

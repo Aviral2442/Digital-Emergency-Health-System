@@ -94,7 +94,16 @@ export const getPoliceListService = async (filters: {
         let total;
 
         if (noFiltersApplied) {
-            total = 100;
+            // determine actual total count and cap at 100 when no filters applied
+            const [countAllRows]: any = await db.query(`SELECT COUNT(*) as total FROM blogs`);
+            const actualTotal = countAllRows[0]?.total || 0;
+
+            if (actualTotal < 100) {
+                total = actualTotal;
+            } else {
+                total = 100;
+            }
+
         } else {
             const [countRows]: any = await db.query(
                 `SELECT COUNT(*) as total FROM police ${finalWhereSQL}`,

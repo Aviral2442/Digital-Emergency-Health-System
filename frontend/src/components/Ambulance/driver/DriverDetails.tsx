@@ -85,7 +85,7 @@ const Field: React.FC<{
   return (
     <div className="mb-2">
       <div className="text-muted mb-1 fs-6">{label}</div>
-      <div className="border rounded px-2 py-1 bg-white">
+      <div className="border rounded px-2 py-1 bg-body text-body">
         {formatValue(value, type)}
       </div>
     </div>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Form } from "react-bootstrap";
 import { TbPencil, TbCheck, TbX } from "react-icons/tb";
-import DateConversion from "../DateConversion";
 import { formatDate } from "../DateFormat";
 
 interface FieldConfig {
@@ -21,6 +20,7 @@ interface FieldConfig {
   rows?: number;
   options?: { value: string | number; label: string }[];
   cols?: number; // Bootstrap column size
+  render?: () => string; // Add this line
 }
 
 interface SectionConfig {
@@ -72,6 +72,7 @@ interface FieldProps {
     | "boolean";
   rows?: number;
   options?: { value: string | number; label: string }[];
+  render?: () => string; // Add this line
 }
 
 const Field: React.FC<FieldProps> = ({
@@ -82,11 +83,17 @@ const Field: React.FC<FieldProps> = ({
   type = "text",
   rows = 3,
   options = [],
+  render, // Add this parameter
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value?.toString() || "");
 
-  const formatDisplayValue = (val: string | number | boolean | null | undefined) => {
+  const formatDisplayValue = (val: string | number | boolean | null | undefined, field?: FieldConfig) => {
+    // Check if there's a custom render function
+    if (field?.render) {
+      return field.render();
+    }
+
     if (val === null || val === undefined) return "N/A";
     
     // Handle boolean values
@@ -128,7 +135,7 @@ const Field: React.FC<FieldProps> = ({
     return valStr;
   };
 
-  const displayValue = formatDisplayValue(value);
+  const displayValue = formatDisplayValue(value, { label, type, rows, options, render } as FieldConfig);
 
   const handleSave = () => {
     onEdit?.(editValue);
@@ -251,6 +258,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
                           type={field.type}
                           rows={field.rows}
                           options={field.options}
+                          render={field.render} // Add this line
                         />
                       </Col>
                     );
