@@ -256,3 +256,41 @@ export const updatePoliceStatusService = async (police_id: number, police_status
         throw new ApiError(500, 'Failed to update police status');
     }
 };
+
+// POLICE ALL DATA BY ID SERVICE
+export const policeAllDataByIdService = async (police_id: number) => {
+    try {
+
+        const query = `
+        SELECT 
+            police.*,
+            vehicle.v_vehicle_name,
+            vehicle.vehicle_rc_number,
+            partner.partner_f_name + " " + partner.partner_l_name AS partner_full_name,
+            partner.partner_mobile,
+            city.city_name
+        FROM police
+        LEFT JOIN partner ON police.police_created_by = 1 AND police.police_created_partner_id = partner.partner_id
+        LEFT JOIN city ON police.police_city_id = city.city_id
+        LEFT JOIN vehicle ON police.police_assigned_vehicle_id > 0 AND police.police_assigned_vehicle_id = vehicle.vehicle_id
+        WHERE police.police_id = ?;
+        `;
+
+        const [rows]: any = await db.query(query, [police_id]);
+
+        if (rows.length > 0) {
+            return {
+                status: 200,
+                message: 'Police all data fetched successfully',
+                jsonData: {
+                    police: rows[0]
+                }
+            }
+        } else {
+            throw new ApiError(404, 'Police not found');
+        }
+
+    } catch (error) {
+        throw new ApiError(500, 'Failed to fetch police all data by ID');
+    }
+};

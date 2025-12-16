@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { addPoliceService, fetchPoliceByIdService, getPoliceListService, updatePoliceService, updatePoliceStatusService } from '../services/police.service';
+import { addPoliceService, fetchPoliceByIdService, getPoliceListService, policeAllDataByIdService, updatePoliceService, updatePoliceStatusService } from '../services/police.service';
 
 // POLICE LIST CONTROLLER
 export const getPoliceListController = async (req: Request, res: Response, next: NextFunction) => {
@@ -83,6 +83,20 @@ export const updatePoliceStatusController = async (req: Request, res: Response, 
         const policeId = parseInt(req.params.police_id);
         const { police_status } = req.body;
         const response = await updatePoliceStatusService(policeId, police_status);
+        return res.status(response.status).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// FETCH POLICE ALL DATA BY ID CONTROLLER
+export const policeAllDataByIdController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (!req.params.police_id) {
+            return res.status(400).json({ message: 'Police ID is required' });
+        }
+        const policeId = parseInt(req.params.police_id);
+        const response = await policeAllDataByIdService(policeId);
         return res.status(response.status).json(response);
     } catch (error) {
         next(error);
