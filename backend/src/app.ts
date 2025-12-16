@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import driverRoutes from "./routes/driver.routes";
 import ambulanceRoutes from "./routes/ambulance.routes";
 import policeRoutes from "./routes/police.routes";
+import hospitalRoutes from "./routes/hospital.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
 import path from "path";
 
@@ -35,6 +36,7 @@ app.use("/api/dashboard", dashboard);
 app.use("/api/driver", driverRoutes);
 app.use("/api/ambulance", ambulanceRoutes);
 app.use("/api/police", policeRoutes);
+app.use("/api/hospital", hospitalRoutes);
 
 app.use(errorMiddleware);
 
