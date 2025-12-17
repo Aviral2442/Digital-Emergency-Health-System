@@ -9,17 +9,28 @@ import {
   getTotalActiveOtherStatusVendorCounts,
   getTotalBookingCount,
   getTotalCancelOngoingBookingCounts,
-  getVendorTodayYesterdayCountService
+  getVendorTodayYesterdayCountService,
+  policeDashboardCounts
 } from '../services/dashboard.service';
 
-// CONTROLLER TO GET COMPLETE, ONGOING, CANCEL & REMINDER BOOKING COUNTS
+// AMBULANCE DASHBOARD COUNTS CONTROLLER
 export const ambulanceCompleteOngoingCancelReminderBookingCountsController = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await ambulanceCompleteOngoingCancelReminderBookingCounts();
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const result = await ambulanceCompleteOngoingCancelReminderBookingCounts();
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// POLICE DASHBOARD COUNTS CONTROLLER
+export const policeDashboardCountsController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await policeDashboardCounts();
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Helper to check if data is empty

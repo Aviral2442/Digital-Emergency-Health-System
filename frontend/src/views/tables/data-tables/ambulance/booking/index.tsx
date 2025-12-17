@@ -236,7 +236,7 @@ const ExportDataWithButtons = ({
         title={
           <div className="w-100">
             {tabKey === 1
-              ? "All Ambulance Bookings"
+              ? "Manage Bookings"
               : tabKey === 2
               ? "Regular Ambulance Bookings"
               : tabKey === 3

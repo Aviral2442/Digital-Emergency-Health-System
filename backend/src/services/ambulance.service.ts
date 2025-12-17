@@ -1,9 +1,6 @@
 import { db } from '../config/db';
 import { ApiError } from '../utils/api-error';
 import { buildFilters } from "../utils/filters";
-import { FieldPacket, RowDataPacket } from 'mysql2';
-
-
 
 // SERVICE TO GET AMBULANCE BOOKING LIST WITH FILTERS AND PAGINATION
 export const getAmbulanceBookingListService = async (filters?: {
@@ -75,16 +72,10 @@ export const getAmbulanceBookingListService = async (filters?: {
                 booking_view.booking_drop,
                 booking_view.booking_status,
                 booking_view.booking_total_amount,
-                booking_view.created_at,
-                (
-                    SELECT remark_text 
-                    FROM remark_data 
-                    WHERE remark_booking_id = booking_view.booking_id 
-                    ORDER BY remark_id DESC 
-                    LIMIT 1
-                ) AS remark_text
+                booking_view.created_at
             FROM booking_view
             ${finalWhereSQL}
+            WHERE booking_view.booking_status != 0
             ORDER BY booking_view.booking_id DESC
             LIMIT ? OFFSET ?
         `;
@@ -158,75 +149,4 @@ export const ambulanceBookingDetailService = async (bookingId: number) => {
     } catch (error) {
         throw new ApiError(500, "Get Ambulance Booking Detail Error On Fetching");
     }
-}
-
-interface AmbulanceBookingData {
-    booking_source: string;
-    booking_type: number;
-    booking_type_for_rental: number;
-    booking_bulk_master_key: string;
-    booking_no_of_bulk: number;
-    booking_bulk_total: number;
-    booking_by_cid: number;
-    booking_view_otp: string;
-    booking_view_status_otp: number;
-    booking_con_name: string;
-    booking_con_mobile: string;
-    booking_category: number;
-    booking_schedule_time: string;
-    booking_pickup: string;
-    booking_drop: string;
-    booking_pickup_city: string;
-    booking_drop_city: string;
-    booking_pick_lat: string;
-    booking_pick_long: string;
-    booking_drop_lat: string;
-    booking_drop_long: string;
-    booking_amount: string;
-    booking_adv_amount: string;
-    booking_payment_type: string;
-    booking_payment_method: string;
-    booking_status: number;
-    booking_distance: string;
-    booking_duration: string;
-    booking_duration_in_sec: string;
-    booking_total_amount: string;
-    booking_payment_status: number;
-    booking_polyline: string;
-    booking_acpt_driver_id: number;
-    booking_acpt_vehicle_id: number;
-    booking_acpt_time: string;
-    booking_ap_polilyne: string;
-    booking_ap_duration: string;
-    booking_a_t_p_duration_in_sec: string;
-    booking_ap_distance: string;
-    booking_view_category_name: string;
-    booking_view_category_icon: string;
-    booking_view_base_rate: string;
-    booking_view_km_till: string;
-    booking_view_per_km_rate: string;
-    booking_view_per_ext_km_rate: string;
-    booking_view_per_ext_min_rate: string;
-    booking_view_km_rate: string;
-    booking_view_total_fare: string;
-    booking_view_service_charge_rate: string;
-    booking_view_service_charge_rate_discount: string;
-    // booking_view_includes: string;
-    // booking_view_pickup_time: string;
-    // booking_view_arrival_time: string;
-    // booking_view_dropped_time: string;
-    // booking_view_rating_status: number;
-    // booking_view_rating_c_to_d_status: number;
-    // booking_radius: string;
-    // created_at: string;
-    // created_at_unix: number;
-    // updated_at: string;
-    booking_user_id: number;
-    // bookingStatus: string;
-    booking_generate_source: string; // -- IVR, app, web , whatsapp, live chat , direct call 
-    // bv_virtual_number_status: number;
-    // bv_virtual_number: string;
-    // bv_cloud_con_crid: string;
-    // bv_cloud_con_crid_c_to_d: string;
-    // bv_shoot_time: string;
 }

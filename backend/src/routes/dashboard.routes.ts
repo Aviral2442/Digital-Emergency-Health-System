@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { consumerCount, latestBookingListOfNewOngoing, latestBookingTransactionList, latestVendorTransList, newOngoingBookingList, totalActiveOtherStatusVendorCounts, totalBookingCount, totalCancelOngoingBookingCounts, getVendorTodayYesterdayCountController, ambulanceCompleteOngoingCancelReminderBookingCountsController } from '../controllers/dashboard.controller';
+import { consumerCount, latestBookingListOfNewOngoing, latestBookingTransactionList, latestVendorTransList, newOngoingBookingList, totalActiveOtherStatusVendorCounts, totalBookingCount, totalCancelOngoingBookingCounts, getVendorTodayYesterdayCountController, ambulanceCompleteOngoingCancelReminderBookingCountsController, policeDashboardCountsController } from '../controllers/dashboard.controller';
 const router = Router();
 
 router.get('/ambulance_booking_count', ambulanceCompleteOngoingCancelReminderBookingCountsController);
+router.get('/police_dashboard_counts', policeDashboardCountsController);
 router.get('/get_total_booking_count', totalBookingCount);
 router.get('/get_total_cancel_ongoing_booking_counts', totalCancelOngoingBookingCounts);
 router.get('/get_total_active_other_status_vendor_counts', totalActiveOtherStatusVendorCounts);

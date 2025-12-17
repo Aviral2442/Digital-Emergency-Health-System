@@ -2,7 +2,7 @@ import { db } from '../config/db';
 import { ApiError } from '../utils/api-error';
 import { RowDataPacket, FieldPacket } from "mysql2";
 
-// SERVICE TO GET COMPLETE, ONGOING, CANCEL & REMINDER BOOKING COUNTS
+// SERVICE BOOKING COUNTS
 export const ambulanceCompleteOngoingCancelReminderBookingCounts = async () => {
     try {
         let query = `
@@ -10,7 +10,7 @@ export const ambulanceCompleteOngoingCancelReminderBookingCounts = async () => {
             COUNT(booking_id) AS total_bookings,
             COUNT(CASE WHEN booking_status = 4 THEN 1 END) AS completed_bookings,
             COUNT(CASE WHEN booking_status = 3 THEN 1 END) AS ongoing_bookings,
-            COUNT(CASE WHEN booking_status = 5 THEN 1 END) AS cancelled_bookings
+            COUNT(CASE WHEN booking_status = 1 THEN 1 END) AS new_bookings
             FROM booking_view
         `;
 
@@ -31,6 +31,37 @@ export const ambulanceCompleteOngoingCancelReminderBookingCounts = async () => {
         console.log(error);
 
         throw new ApiError(500, "Failed To Load Booking Counts");
+    }
+};
+
+// SERVICE BOOKING COUNTS
+export const policeDashboardCounts = async () => {
+    try {
+        let query = `
+            SELECT
+            COUNT(police_id) AS police_total,
+            COUNT(CASE WHEN police_duty_status = 'ON' THEN 1 END) AS onDuty_police,
+            COUNT(CASE WHEN police_duty_status = 'OFF' THEN 1 END) AS offDuty_police,
+            COUNT(CASE WHEN police_status = 1 THEN 1 END) AS active_police
+            FROM police
+        `;
+
+        const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(query);
+
+        if (rows.length === 0 || !rows) {
+            throw new ApiError(404, 'Data Not Found');
+        }
+
+        return {
+            result: 200,
+            message: "Police status counts fetched successfully",
+            jsonData: {
+                police_status_counts: rows[0]
+            }
+        };
+    } catch (error) {
+        console.log(error);
+        throw new ApiError(500, "Failed To Load Police Counts");
     }
 };
 
