@@ -3,71 +3,7 @@ import { ApiError } from '../utils/api-error';
 import { buildFilters } from "../utils/filters";
 import { FieldPacket, RowDataPacket } from 'mysql2';
 
-// SERVICE TO GET TOTAL AMBULANCE BOOKING COUNT
-export const ambulanceBookingCountService = async () => {
-    try {
-        const query = `
-            SELECT 
-            COUNT(booking_id) AS bookingTotalCount,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() THEN 1 END) AS today_bookings,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() - INTERVAL 1 DAY THEN 1 END) AS yesterday_bookings,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() - INTERVAL 2 DAY THEN 1 END) AS day_2_bookings,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() - INTERVAL 3 DAY THEN 1 END) AS day_3_bookings,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() - INTERVAL 4 DAY THEN 1 END) AS day_4_bookings,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() - INTERVAL 5 DAY THEN 1 END) AS day_5_bookings,
-            COUNT(CASE WHEN DATE(FROM_UNIXTIME(booking_view.created_at_unix)) = CURDATE() - INTERVAL 6 DAY THEN 1 END) AS day_6_bookings
-            FROM booking_view
-        `;
 
-        const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(query);
-
-        if (rows.length === 0 || !rows) {
-            throw new ApiError(404, 'Data Not Found');
-        }
-
-        return {
-            result: 200,
-            message: "Total booking count fetched successfully",
-            jsonData: {
-                total_booking_count: rows[0]
-            }
-        };
-
-    } catch (error) {
-        throw new ApiError(500, "Failed To Load Total Booking Count");
-    }
-};
-
-// SERVICE TO GET COMPLETE, ONGOING, CANCEL & REMINDER BOOKING COUNTS
-export const ambulanceCompleteOngoingCancelReminderBookingCounts = async () => {
-    try {
-        let query = `
-            SELECT
-            COUNT(CASE WHEN booking_status = 4 THEN 1 END) AS completed_bookings,
-            COUNT(CASE WHEN booking_status = 3 THEN 1 END) AS ongoing_bookings,
-            COUNT(CASE WHEN booking_status = 5 THEN 1 END) AS cancelled_bookings
-            FROM booking_view
-        `;
-
-        const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(query);
-
-        if (rows.length === 0 || !rows) {
-            throw new ApiError(404, 'Data Not Found');
-        }
-
-        return {
-            result: 200,
-            message: "Booking status counts fetched successfully",
-            jsonData: {
-                completed_ongoing_cancelled_counts: rows[0]
-            }
-        };
-    } catch (error) {
-        console.log(error);
-
-        throw new ApiError(500, "Failed To Load Booking Counts");
-    }
-};
 
 // SERVICE TO GET AMBULANCE BOOKING LIST WITH FILTERS AND PAGINATION
 export const getAmbulanceBookingListService = async (filters?: {

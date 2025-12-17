@@ -1,25 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { ambulanceBookingDetailService, ambulanceBookingCountService, getAmbulanceBookingListService, ambulanceCompleteOngoingCancelReminderBookingCounts } from "../services/ambulance.service";
+import { ambulanceBookingDetailService, getAmbulanceBookingListService } from "../services/ambulance.service";
 
-// CONTROLLER TO GET TOTAL AMBULANCE BOOKING COUNT
-export const ambulanceBookingCountController = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await ambulanceBookingCountService();
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
-};
 
-// CONTROLLER TO GET COMPLETE, ONGOING, CANCEL & REMINDER BOOKING COUNTS
-export const ambulanceCompleteOngoingCancelReminderBookingCountsController = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await ambulanceCompleteOngoingCancelReminderBookingCounts();
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
-};
 
 // CONTROLLER TO GET AMBULANCE BOOKING LIST
 export const getAmbulanceBookingListController = async (req: Request, res: Response, next: NextFunction) => {

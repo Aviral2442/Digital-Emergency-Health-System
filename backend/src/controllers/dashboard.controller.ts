@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import {
+  ambulanceCompleteOngoingCancelReminderBookingCounts,
   getConsumersCounts,
   getLatest5BookingTransList,
   getLatest5VendorTransList,
@@ -10,6 +11,16 @@ import {
   getTotalCancelOngoingBookingCounts,
   getVendorTodayYesterdayCountService
 } from '../services/dashboard.service';
+
+// CONTROLLER TO GET COMPLETE, ONGOING, CANCEL & REMINDER BOOKING COUNTS
+export const ambulanceCompleteOngoingCancelReminderBookingCountsController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await ambulanceCompleteOngoingCancelReminderBookingCounts();
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+};
 
 // Helper to check if data is empty
 const isEmpty = (data: any): boolean => {
