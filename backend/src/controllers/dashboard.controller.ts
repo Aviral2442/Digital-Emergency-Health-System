@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import {
   ambulanceCompleteOngoingCancelReminderBookingCounts,
+  driverDashboardCounts,
   getConsumersCounts,
   getLatest5BookingTransList,
   getLatest5VendorTransList,
@@ -10,6 +11,7 @@ import {
   getTotalBookingCount,
   getTotalCancelOngoingBookingCounts,
   getVendorTodayYesterdayCountService,
+  hospitalDashboardCounts,
   policeDashboardCounts
 } from '../services/dashboard.service';
 
@@ -31,6 +33,26 @@ export const policeDashboardCountsController = async (req: Request, res: Respons
   } catch (error) {
     next(error);
   }
+};
+
+// DRIVER DASHBOARD COUNTS CONTROLLER
+export const driverDashboardCountsController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await driverDashboardCounts();
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// HOSPITAL DASHBOARD COUNTS CONTROLLER
+export const hospitalDashboardCountsController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await hospitalDashboardCounts();
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  } 
 };
 
 // Helper to check if data is empty
