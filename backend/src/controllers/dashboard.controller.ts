@@ -3,6 +3,7 @@ import {
   bookingDashboardCounts,
   driverDashboardCounts,
   hospitalDashboardCounts,
+  mapLocationDashboardCounts,
   policeDashboardCounts
 } from '../services/dashboard.service';
 
@@ -44,4 +45,14 @@ export const hospitalDashboardCountsController = async (req: Request, res: Respo
   } catch (error) {
     next(error);
   }
+};
+
+// MAP LOCATION DASHBOARD COUNTS CONTROLLER
+export const mapLocationDashboardCountsController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await mapLocationDashboardCounts();
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  } 
 };

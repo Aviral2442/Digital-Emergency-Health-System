@@ -126,3 +126,75 @@ export const hospitalDashboardCounts = async () => {
         throw new ApiError(500, "Failed To Load Hospital Counts");
     }
 };
+
+// MAP LOCATION DASHBOARD COUNTS
+export const mapLocationDashboardCounts = async () => {
+    try {
+
+        let policeQuery = `
+        SELECT 
+            police.police_id, 
+            police.police_name, 
+            police.police_mobile, 
+            police_live_location.police_live_location_lat, 
+            police_live_location.police_live_location_long
+        FROM police_live_location
+        LEFT JOIN police ON police_live_location.police_live_location_d_id = police.police_id
+        `;
+
+        // WHERE police.police_duty_status = 'ON'
+
+        let driverQuery = `
+        SELECT 
+            driver.driver_id, 
+            driver.driver_name, 
+            driver.driver_mobile, 
+            driver_live_location.driver_live_location_lat, 
+            driver_live_location.driver_live_location_long
+        FROM driver_live_location
+        LEFT JOIN driver ON driver_live_location.driver_live_location_d_id = driver.driver_id
+        WHERE driver.driver_duty_status = 'ON'
+        `;
+
+        let bookingQuery = `
+        SELECT 
+            booking_id,
+            booking_pick_lat,
+            booking_pick_long,
+            booking_drop_lat,
+            booking_drop_long,
+            booking_polyline
+        FROM booking_view
+        WHERE booking_view.booking_schedule_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        `;
+
+        let hospitalQuery = `
+        SELECT 
+            hospital_id,
+            hospital_name,
+            hospital_lat,
+            hospital_long
+        FROM hospital_lists
+        WHERE hospital_status = 0
+        `;
+
+        const [policeRows]: [RowDataPacket[], FieldPacket[]] = await db.query(policeQuery);
+        const [driverRows]: [RowDataPacket[], FieldPacket[]] = await db.query(driverQuery);
+        const [bookingRows]: [RowDataPacket[], FieldPacket[]] = await db.query(bookingQuery);
+        const [hospitalRows]: [RowDataPacket[], FieldPacket[]] = await db.query(hospitalQuery);
+
+        return {
+            result: 200,
+            message: "Map location counts fetched successfully",
+            jsonData: {
+                police_locations: policeRows,
+                driver_locations: driverRows,
+                booking_locations: bookingRows,
+                hospital_locations: hospitalRows
+            }
+        };
+
+    } catch (error) {
+        throw new ApiError(500, "Failed To Load Map Location Counts");
+    }
+}
