@@ -2,11 +2,11 @@ import { Card, CardBody, CardHeader, CardTitle, Col, Row } from "react-bootstrap
 import { LayerGroup, LayersControl, MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import marketImg from '@/assets/images/leaflet/marker-icon.png'
 import markerShadowImg from '@/assets/images/leaflet/marker-shadow.png'
-import L, {type LatLngExpression} from 'leaflet'
+import L, { type LatLngExpression } from 'leaflet'
 
 
 const LayerControl = () => {
-    const center: LatLngExpression = [26.8, 80.9]
+    const center: LatLngExpression = [22.59, 85.96]
 
     const customIcon = L.icon({
         iconUrl: marketImg,
@@ -17,14 +17,14 @@ const LayerControl = () => {
         <Card>
             <CardHeader className="d-block">
                 <CardTitle as="h5" className="mb-1">
-                    Basic Map
+                    Live Location Tracker
                 </CardTitle>
-                <p className="text-muted mb-0">A simple Leaflet map centered with default tile layer and controls.</p>
+                <p className="text-muted mb-0">Live location tracking for drivers, police, hospitals, and booking routes.</p>
             </CardHeader>
             <CardBody>
-                <MapContainer center={center} zoom={5} scrollWheelZoom={false} style={{height: '300px'}}>
+                <MapContainer center={center} zoom={5} scrollWheelZoom={false} style={{ height: '750px' }}>
                     <LayersControl position="topright">
-                        {/* Base Layers */}
+
                         <LayersControl.BaseLayer checked name="Street">
                             <TileLayer
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -39,7 +39,6 @@ const LayerControl = () => {
                             />
                         </LayersControl.BaseLayer>
 
-                        {/* Overlay Layer Group for Cities */}
                         <LayersControl.Overlay checked name="Cities">
                             <LayerGroup>
                                 <Marker position={[26.8, 80.9]} icon={customIcon}>
@@ -63,14 +62,13 @@ const LayerControl = () => {
     )
 }
 
-
 const Page = () => {
     return (
-            <Row>
-                <Col xl={12}>
-                    <LayerControl/>
-                </Col>
-            </Row>
+        <Row>
+            <Col xl={12}>
+                <LayerControl />
+            </Col>
+        </Row>
     )
 }
 
