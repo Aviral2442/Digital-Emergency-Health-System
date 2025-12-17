@@ -2,25 +2,26 @@ import {Card, CardBody, CardFooter, ProgressBar} from 'react-bootstrap'
 import {LuUsers} from 'react-icons/lu'
 import CountUp from "react-countup";
 import React from 'react'
+import axios from 'axios';
 
 const ActiveUsers = () => {
 
-    // const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
+    const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
-    const [vendors, _setVendors] = React.useState({
-        today_new_vendors: 5,
-        active_vendors: 5,
-        other_status_vendors: 10,
-        total_vendors: 50
+    const [hospital, setHospital] = React.useState({
+        hospital_total: 0,
+        available_247_hospital: 0,
+        unavailable_hospital: 0,
+        varified_hospital: 0
     })
     const [isLoading, setIsLoading] = React.useState(true)
 
-    const fetchVendorCounst = async () => {
+    const fetchHospitalCounts = async () => {
         try{
             setIsLoading(true)
-            // const res = await axios.get(`${baseURL}/dashboard/get_total_active_other_status_vendor_counts`)
-            // console.log("API Response of VENDORS: ",res.data?.jsonData?.vendorCounts)
-            // setVendors(res.data?.jsonData?.vendorCounts || {})
+            const res = await axios.get(`${baseURL}/dashboard/hospital_dashboard_counts`)
+            console.log("API Response of VENDORS: ",res.data?.jsonData?.hospital_status_counts)
+            setHospital(res.data?.jsonData?.hospital_status_counts || {})
         } catch (error){
             console.error("Error fetching VENDORS: ", error)
         } finally {
@@ -29,10 +30,10 @@ const ActiveUsers = () => {
     }
 
     React.useEffect(() => {
-        fetchVendorCounst();
+        fetchHospitalCounts();
     }, [])
 
-    const {  active_vendors, other_status_vendors, total_vendors } = vendors;
+    const {  available_247_hospital, unavailable_hospital, hospital_total, varified_hospital } = hospital;
 
     if (isLoading) {
         return (
@@ -52,7 +53,7 @@ const ActiveUsers = () => {
                         <h5 className="text-uppercase mb-2">Hospital's</h5>
                         <h3 className="mb-0 fw-normal">
                         <span>
-                          <CountUp end={Number(total_vendors) || 0} duration={2} enableScrollSpy scrollSpyOnce/>
+                          <CountUp end={Number(hospital_total) || 0} duration={2} enableScrollSpy scrollSpyOnce/>
                         </span>
                         </h3>
                         <p className="text-muted mb-2">Total</p>
@@ -62,20 +63,20 @@ const ActiveUsers = () => {
                     </div>
                 </div>
 
-                <ProgressBar now={active_vendors} className="progress-lg mb-2"/>
+                <ProgressBar now={available_247_hospital} className="progress-lg mb-2"/>
 
                 <div className="d-flex justify-content-between">
                     <div>
-                        <span className="text-muted">Hospital</span>
-                        <h5 className="mb-0">{active_vendors}</h5>
+                        <span className="text-muted">24/7 Available</span>
+                        <h5 className="mb-0">{available_247_hospital}</h5>
                     </div>
                     <div className="text-end">
-                        <span className="text-muted">Beds</span>
-                        <h5 className="mb-0">{other_status_vendors}</h5>
+                        <span className="text-muted">Unavailable</span>
+                        <h5 className="mb-0">{unavailable_hospital}</h5>
                     </div>
                 </div>
             </CardBody>
-            <CardFooter className="text-muted text-center">{5} Active Data Currently We Have</CardFooter>
+            <CardFooter className="text-muted text-center">{varified_hospital} Verified Hospitals</CardFooter>
         </Card>
     )
 }
