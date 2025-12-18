@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
-import ExportDataWithButtons from '@/views/tables/data-tables/ambulance/booking'
+import ExportDataWithButtons from '@/views/tables/data-tables/booking'
 
 const Page: React.FC = () => {
 

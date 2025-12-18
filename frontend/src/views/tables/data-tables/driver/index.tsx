@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import ComponentCard from "@/components/ComponentCard";
-import "@/global.css";
 import DT from "datatables.net-bs5";
 import DataTable from "datatables.net-react";
 import "datatables.net-buttons-bs5";
 import "datatables.net-buttons/js/buttons.html5";
+import "@/global.css";
 
-import { TbArrowRight, TbEdit, TbReceipt } from "react-icons/tb";
+import { TbEye } from "react-icons/tb";
 
 import jszip from "jszip";
 import pdfmake from "pdfmake";
-import { vehicleColumns } from "@/views/tables/data-tables/ambulance/vehicle/components/vehical";
+import { driverColumns } from "@/views/tables/data-tables/driver/components/driver";
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AddRemark, { REMARK_CATEGORY_TYPES } from "@/components/AddRemark";
 import TablePagination from "@/components/table/TablePagination";
 import TableFilters from "@/components/table/TableFilters";
 import { useTableFilters } from "@/hooks/useTableFilters";
@@ -29,19 +28,21 @@ const tableConfig: Record<
   { endpoint: string; columns: any[]; headers: string[] }
 > = {
   1: {
-    endpoint: "/vehicle/get_vehicle_list",
-    columns: vehicleColumns,
+    endpoint: "/driver/get_drivers_list",
+    columns: driverColumns,
     headers: [
       "S.No.",
       "ID",
-      "Added By",
-      "Added Type",
+      "Profile",
       "Name",
-      "Category",
-      // "Verify Type",
-      "Verify Date",
-      "Exp Date",
-      "Created At",
+      "Mobile",
+      "Wallet",
+      // "City ID",
+      "Created By",
+      "Partner",
+      "Duty Status",
+      "Date",
+      // "Remark",
       "Status",
     ],
   },
@@ -58,16 +59,10 @@ type ExportDataWithButtonsProps = {
 const ExportDataWithButtons = ({
   tabKey,
   refreshFlag,
-  onAddNew,
   filterParams = {},
-  onDataChanged,
 }: ExportDataWithButtonsProps) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isRemarkOpen, setIsRemarkOpen] = useState(false);
-  const [selectedVehicalId, SetSelectedVehicalId] = useState<number | null>(
-    null
-  );
 
   const [pageSize] = useState(10);
   const [_total, setTotal] = useState(0);
@@ -94,11 +89,11 @@ const ExportDataWithButtons = ({
   const { endpoint, columns, headers } = tableConfig[tabKey];
 
   const StatusFilterOptions = [
-    { label: "unverified", value: 0 },
-    { label: "verified", value: 1 },
-    { label: "inactive", value: 2 },
-    { label: "deleted", value: 3 },
-    { label: "verification", value: 4 },
+    { label: "New", value: "new" },
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inActive" },
+    { label: "Delete", value: "delete" },
+    { label: "Verification", value: "verification" },
   ];
 
   const fetchData = async () => {
@@ -108,42 +103,26 @@ const ExportDataWithButtons = ({
       const res = await axios.get(`${baseURL}${endpoint}`, { params });
       console.log("API Response:", res.data);
 
-      // Accept either 'vehicle_list' or 'vehicles'
-      const vehicles =
-        res.data?.jsonData?.vehicle_list || res.data?.jsonData?.vehicles || [];
-      console.log("Fetched Vehicle Data:", vehicles);
-      setData(vehicles);
+      const drivers = res.data?.jsonData?.drivers || [];
+      setData(drivers);
 
-      if (res.data?.paginations) {
-        setTotal(res.data?.paginations?.total);
-        setTotalPages(res.data?.paginations?.totalPages);
+      if (res.data.paginations) {
+        setTotal(res.data.paginations.total);
+        setTotalPages(res.data.paginations.totalPages);
       } else {
-        setTotal(res.data?.total);
+        setTotal(res.data?.total || drivers.length);
         setTotalPages(
-          res.data?.pagination?.totalPages ||
-            Math.ceil(vehicles.length / pageSize)
+          res.data?.totalPages || Math.ceil(drivers.length / pageSize)
         );
       }
     } catch (error) {
-      console.error("Error fetching vehicle data:", error);
+      console.error("Error fetching driver data:", error);
       setData([]);
       setTotal(0);
       setTotalPages(0);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleRemark = (rowData: any) => {
-    const id = rowData?.vehicle_id;
-    console.log("Selected Vehicle ID for Remark:", id);
-    SetSelectedVehicalId(id);
-    setIsRemarkOpen(true);
-  };
-
-  const handleRemarkSuccess = () => {
-    fetchData();
-    onDataChanged?.();
   };
 
   useEffect(() => {
@@ -181,18 +160,12 @@ const ExportDataWithButtons = ({
         root.render(
           <div className="d-flex flex-row gap-1">
             <button
-              className="edit-icon p-0 p-1 text-white rounded-1 d-flex align-items-center justify-content-center"
+              className="eye-icon"
               onClick={() => {
-                navigate(`/ambulance/vehicle/edit/${rowData.vehicle_id}`);
+                navigate(`/driver-detail/${rowData.driver_id}`);
               }}
             >
-              <TbEdit className="me-1" />
-            </button>
-            <button
-              className="remark-icon"
-              onClick={() => handleRemark(rowData)}
-            >
-              <TbReceipt className="me-1" />
+              <TbEye className="me-1" />
             </button>
           </div>
         );
@@ -200,13 +173,13 @@ const ExportDataWithButtons = ({
     },
   ];
 
-  const headersWithActions = [...headers, "Actions"];
-
   return (
     <>
       <ComponentCard
-        title={tabKey === 1 ? "Manage Vehicles" : ""}
-        className="mb-2 overflow-x-auto"
+        title={
+          <div className="w-100">{tabKey === 1 ? "Manage Drivers" : ""}</div>
+        }
+        className="mb-2"
         headerActions={
           <div className="d-flex gap-2 align-items-center">
             <TableFilters
@@ -219,21 +192,15 @@ const ExportDataWithButtons = ({
               statusOptions={StatusFilterOptions}
               className="w-100"
             />
-            <button
-              className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 text-nowrap"
-              onClick={onAddNew}
-            >
-              Add New <TbArrowRight className="fs-6" />
-            </button>
           </div>
         }
       >
         {loading ? (
           <div className="text-center py-4">Loading...</div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ">
             <DataTable
-              key={`vehicle-table-${tabKey}-${dateFilter}-${statusFilter}-${dateRange}-${currentPage}`}
+              key={`driver-table-${tabKey}-${dateFilter}-${statusFilter}-${dateRange}-${currentPage}`}
               data={data}
               columns={columnsWithActions}
               options={{
@@ -272,9 +239,10 @@ const ExportDataWithButtons = ({
             >
               <thead className="thead-sm text-capitalize fs-xxs">
                 <tr>
-                  {headersWithActions.map((header, idx) => (
+                  {headers.map((header, idx) => (
                     <th key={idx}>{header}</th>
                   ))}
+                  {/* <th>Actions</th> */}
                 </tr>
               </thead>
             </DataTable>
@@ -297,16 +265,9 @@ const ExportDataWithButtons = ({
           </div>
         )}
       </ComponentCard>
-
-      <AddRemark
-        isOpen={isRemarkOpen}
-        onClose={() => setIsRemarkOpen(false)}
-        remarkCategoryType={REMARK_CATEGORY_TYPES.VEHICLE}
-        primaryKeyId={selectedVehicalId}
-        onSuccess={handleRemarkSuccess}
-      />
     </>
   );
 };
 
+// Export the component directly, not wrapped in another component
 export default ExportDataWithButtons;
