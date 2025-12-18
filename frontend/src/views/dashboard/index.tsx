@@ -27,7 +27,7 @@ const Page = () => {
                 </Col>
             </Row>
 
-            <Row className="mt-3">
+            <Row className="">
                 <Col cols={12}>
                     <RequestStatistics/>
                 </Col>

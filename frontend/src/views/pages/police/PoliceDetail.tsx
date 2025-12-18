@@ -41,9 +41,9 @@ const PoliceDetail: React.FC = () => {
         { label: "Police ID", name: "police_id" },
         { label: "First Name", name: "police_name" },
         { label: "Last Name", name: "police_last_name" },
-        { label: "Mobile", name: "police_mobile", type: "tel" },
-        { label: "Wallet Amount", name: "police_wallet_amount", type: "number" },
-        { label: "Date of Birth", name: "police_dob", type: "date" },
+        { label: "Mobile", name: "police_mobile", type: "tel" as const },
+        { label: "Wallet Amount", name: "police_wallet_amount", type: "number" as const },
+        { label: "Date of Birth", name: "police_dob", type: "date" as const },
         { label: "Gender", name: "police_gender" },
         { label: "City Name", name: "city_name" },
       ],
@@ -62,7 +62,7 @@ const PoliceDetail: React.FC = () => {
         { label: "Created By", name: "police_created_by" },
         { label: "Created Partner ID", name: "police_created_partner_id" },
         { label: "Partner Full Name", name: "partner_full_name" },
-        { label: "Partner Mobile", name: "partner_mobile", type: "tel" },
+        { label: "Partner Mobile", name: "partner_mobile", type: "tel" as const },
         { label: "Partner Auth Key", name: "partner_auth_key" },
       ],
     },
@@ -80,12 +80,12 @@ const PoliceDetail: React.FC = () => {
     {
       title: "Statistics & Performance",
       fields: [
-        { label: "Total Rides Till Today", name: "police_total_ride_till_today", type: "number" },
-        { label: "Rating", name: "police_rating", type: "number" },
+        { label: "Total Rides Till Today", name: "police_total_ride_till_today", type: "number" as const },
+        { label: "Rating", name: "police_rating", type: "number" as const },
         {
           label: "Last Booking Notified Time",
           name: "police_last_booking_notified_time",
-          type: "datetime-local",
+          type: "datetime-local" as const,
         },
       ],
     },
@@ -93,9 +93,9 @@ const PoliceDetail: React.FC = () => {
       title: "Verification & Bonus",
       fields: [
         { label: "Verified By", name: "verify_by" },
-        { label: "Verify Date", name: "police_verify_date", type: "datetime-local" },
+        { label: "Verify Date", name: "police_verify_date", type: "datetime-local" as const },
         { label: "Join Bonus Status", name: "join_bonus_status" },
-        { label: "Join Bonus Time", name: "join_bonus_time", type: "datetime-local" },
+        { label: "Join Bonus Time", name: "join_bonus_time", type: "datetime-local" as const },
       ],
     },
     {
@@ -103,8 +103,8 @@ const PoliceDetail: React.FC = () => {
       fields: [
         { label: "FCM Token", name: "police_fcm_token" },
         { label: "Profile Image", name: "police_profile_img" },
-        { label: "Created At", name: "created_at", type: "datetime-local" },
-        { label: "Updated At", name: "updated_at", type: "datetime-local" },
+        { label: "Created At", name: "created_at", type: "datetime-local" as const },
+        { label: "Updated At", name: "updated_at", type: "datetime-local" as const },
       ],
     },
   ];

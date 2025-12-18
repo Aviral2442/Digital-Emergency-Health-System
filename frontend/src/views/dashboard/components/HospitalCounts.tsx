@@ -20,7 +20,7 @@ const ActiveUsers = () => {
         try{
             setIsLoading(true)
             const res = await axios.get(`${baseURL}/dashboard/hospital_dashboard_counts`)
-            console.log("API Response of VENDORS: ",res.data?.jsonData?.hospital_status_counts)
+            // console.log("API Response of VENDORS: ",res.data?.jsonData?.hospital_status_counts)
             setHospital(res.data?.jsonData?.hospital_status_counts || {})
         } catch (error){
             console.error("Error fetching VENDORS: ", error)

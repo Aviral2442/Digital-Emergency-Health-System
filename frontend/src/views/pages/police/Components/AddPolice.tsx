@@ -15,9 +15,10 @@ const policeValidationSchema = Yup.object({
     .required("Mobile number is required"),
   police_dob: Yup.date().required("Date of birth is required"),
   police_gender: Yup.string().required("Gender is required"),
+  police_state: Yup.string().required("State is required"),
   police_city_id: Yup.number().required("City is required"),
-  police_created_by: Yup.number().required("Created by is required"),
-  police_created_partner_id: Yup.number().required("Partner ID is required"),
+  // police_created_by: Yup.number().required("Created by is required"),
+  // police_created_partner_id: Yup.number().required("Partner ID is required"),
 });
 
 const AddPolice = () => {
@@ -29,6 +30,8 @@ const AddPolice = () => {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [partners, setPartners] = useState<Array<{ partner_id: number; partner_f_name: string, partner_l_name: string, partner_mobile: string }>>([]);
+  const [cities, setCities] = useState<Array<{ city_id: number; city_name: string }>>([]);
 
   const [initialValues, setInitialValues] = useState({
     police_profile_img: null as File | null,
@@ -37,6 +40,7 @@ const AddPolice = () => {
     police_mobile: "",
     police_dob: "",
     police_gender: "",
+    police_state: "",
     police_city_id: "",
     police_created_by: "",
     police_created_partner_id: "",
@@ -48,13 +52,41 @@ const AddPolice = () => {
     }
   }, [id]);
 
+
+  const fetchCities = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/get_cities`);
+      // console.log("Cities fetched:", response.data);
+      setCities(response.data?.jsonData?.city_list || []);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      setCities([]);
+    }
+  }
+
+  const fetchPartners = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/get_partners_list`);
+      // console.log("Partners fetched:", response.data);
+      setPartners(response.data?.jsonData?.partners || []);
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      setPartners([]);
+    }
+  }
+
+  React.useEffect(() => {
+    fetchCities();
+    fetchPartners();
+  }, []);
+
   const fetchPoliceDetails = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
         `${baseURL}/police/fetch_police/${id}`
       );
-      const police = response.data.jsonData.police;
+      const police = response.data?.jsonData?.police;
 
       // Convert Unix timestamp to YYYY-MM-DD format
       const dobDate = police.police_dob
@@ -68,14 +100,17 @@ const AddPolice = () => {
         police_mobile: police.police_mobile?.toString() || "",
         police_dob: dobDate,
         police_gender: police.police_gender || "",
+        police_state: police.police_state?.toString() || "",
         police_city_id: police.police_city_id?.toString() || "",
         police_created_by: police.police_created_by?.toString() || "",
         police_created_partner_id: police.police_created_partner_id?.toString() || "",
       });
 
+
       if (police.police_profile_img) {
         setPreviewImage(`${baseURL}/${police.police_profile_img}`);
       }
+      // console.log("Police details fetched:", police);
     } catch (err: any) {
       console.error("Error fetching police details:", err);
       setError(err.response?.data?.message || "Failed to fetch police details");
@@ -115,6 +150,7 @@ const AddPolice = () => {
       formData.append("police_mobile", values.police_mobile);
       formData.append("police_dob", values.police_dob);
       formData.append("police_gender", values.police_gender);
+      formData.append("police_state", values.police_state);
       formData.append("police_city_id", values.police_city_id);
       formData.append("police_created_by", values.police_created_by);
       formData.append("police_created_partner_id", values.police_created_partner_id);
@@ -245,7 +281,7 @@ const AddPolice = () => {
                   </Card.Header>
                   <Card.Body>
                     <Row className="g-3">
-                      <Col md={6}>
+                      <Col md={3}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
                             First Name <span className="text-danger">*</span>
@@ -267,7 +303,7 @@ const AddPolice = () => {
                         </Form.Group>
                       </Col>
 
-                      <Col md={6}>
+                      <Col md={3}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
                             Last Name <span className="text-danger">*</span>
@@ -289,7 +325,7 @@ const AddPolice = () => {
                         </Form.Group>
                       </Col>
 
-                      <Col md={6}>
+                      <Col md={3}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
                             Mobile Number <span className="text-danger">*</span>
@@ -312,7 +348,7 @@ const AddPolice = () => {
                         </Form.Group>
                       </Col>
 
-                      <Col md={6}>
+                      <Col md={3}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
                             Date of Birth <span className="text-danger">*</span>
@@ -333,7 +369,7 @@ const AddPolice = () => {
                         </Form.Group>
                       </Col>
 
-                      <Col md={6}>
+                      <Col md={4}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
                             Gender <span className="text-danger">*</span>
@@ -358,13 +394,12 @@ const AddPolice = () => {
                         </Form.Group>
                       </Col>
 
-                      <Col md={6}>
+                      <Col md={4}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
-                            City ID <span className="text-danger">*</span>
+                            City <span className="text-danger">*</span>
                           </Form.Label>
-                          <Form.Control
-                            type="number"
+                          <Form.Select
                             name="police_city_id"
                             value={values.police_city_id}
                             onChange={handleChange}
@@ -372,8 +407,14 @@ const AddPolice = () => {
                             isInvalid={
                               touched.police_city_id && !!errors.police_city_id
                             }
-                            placeholder="Enter city ID"
-                          />
+                          >
+                            <option value="">Select City</option>
+                            {cities.map((city) => (
+                              <option key={city.city_id} value={city.city_id}>
+                                {city.city_name}
+                              </option>
+                            ))}
+                          </Form.Select>
                           <Form.Control.Feedback type="invalid">
                             {errors.police_city_id}
                           </Form.Control.Feedback>
@@ -397,8 +438,7 @@ const AddPolice = () => {
                           <Form.Label className="fs-6 fw-semibold">
                             Created By <span className="text-danger">*</span>
                           </Form.Label>
-                          <Form.Control
-                            type="number"
+                          <Form.Select
                             name="police_created_by"
                             value={values.police_created_by}
                             onChange={handleChange}
@@ -406,36 +446,45 @@ const AddPolice = () => {
                             isInvalid={
                               touched.police_created_by && !!errors.police_created_by
                             }
-                            placeholder="Enter creator ID"
-                          />
+                          >
+                            <option value="">Select Creator</option>
+                            <option value="0">Self</option>
+                            <option value="1">Partner</option>
+                          </Form.Select>
                           <Form.Control.Feedback type="invalid">
                             {errors.police_created_by}
                           </Form.Control.Feedback>
                         </Form.Group>
                       </Col>
 
-                      <Col md={6}>
-                        <Form.Group>
-                          <Form.Label className="fs-6 fw-semibold">
-                            Partner ID <span className="text-danger">*</span>
-                          </Form.Label>
-                          <Form.Control
-                            type="number"
-                            name="police_created_partner_id"
-                            value={values.police_created_partner_id}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={
-                              touched.police_created_partner_id &&
-                              !!errors.police_created_partner_id
-                            }
-                            placeholder="Enter partner ID"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.police_created_partner_id}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
+                      {values.police_created_by === "1" && (
+                        <Col md={6}>
+                          <Form.Group>
+                            <Form.Label className="fs-6 fw-semibold">
+                              Partner ID <span className="text-danger">*</span>
+                            </Form.Label>
+                            <Form.Select
+                              name="police_created_partner_id"
+                              value={values.police_created_partner_id}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              isInvalid={
+                                touched.police_created_partner_id && !!errors.police_created_partner_id
+                              }
+                            >
+                              <option value="">Select Partner</option>
+                              {partners.map((partner) => (
+                                <option key={partner.partner_id} value={partner.partner_id}>
+                                  {partner.partner_f_name} {partner.partner_l_name} ({partner.partner_mobile})
+                                </option>
+                              ))}
+                            </Form.Select>
+                            <Form.Control.Feedback type="invalid">
+                              {errors.police_created_partner_id}
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                        </Col>
+                      )}
                     </Row>
                   </Card.Body>
                 </Card>

@@ -20,7 +20,7 @@ const ActiveUsers = () => {
         try{
             setIsLoading(true)
             const res = await axios.get(`${baseURL}/dashboard/driver_dashboard_counts`)
-            console.log("API Response of Driver: ",res.data?.jsonData?.driver_status_counts)
+            // console.log("API Response of Driver: ",res.data?.jsonData?.driver_status_counts)
             setDriver(res.data?.jsonData?.driver_status_counts || {})
         } catch (error){
             console.error("Error fetching Driver: ", error)

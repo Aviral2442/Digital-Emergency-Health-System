@@ -30,19 +30,8 @@ const tableConfig: Record<
   1: {
     endpoint: "/police/get_police_list",
     columns: policeColumns,
-    headers: [
-      "S.No.",
-      "ID",
-      "Profile",
-      "Name",
-      "Partner ID",
-      "Created Partner",
-      "Mobile",
-      "Amount",
-      "By",
-      "Created",
-      "Status",
-    ],
+    headers: ["S.No.", 'ID', 'By', 'Profile', 'Name', 'Created Partner', 'Mobile', 'Amount', 'Created', 'Status'],
+
   },
 };
 
@@ -184,7 +173,7 @@ const ExportDataWithButtons = ({
     <>
       <ComponentCard
         title={
-          <div className="w-100">{tabKey === 1 ? "Manage Drivers" : ""}</div>
+          <div className="w-100">{tabKey === 1 ? "Manage Police" : ""}</div>
         }
         className="mb-2"
         headerActions={

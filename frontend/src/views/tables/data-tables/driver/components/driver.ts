@@ -41,7 +41,7 @@ export const driverColumns = [
         data: 'driver_profile_img',
         render: (data: string) => {
             if (data) {
-                return `<img src="${data}" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />`;
+                return `<img src="https://appdata.medcab.in/${data}" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />`;
             }
             return '';
         }
