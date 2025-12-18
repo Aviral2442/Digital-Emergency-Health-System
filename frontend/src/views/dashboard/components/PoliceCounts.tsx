@@ -49,7 +49,7 @@ const ActiveUsers = () => {
             <CardBody>
                 <div className="d-flex justify-content-between align-items-start">
                     <div>
-                        <h5 className="text-uppercase mb-2">Police's</h5>
+                        <h5 className="text-uppercase fs-5 mb-2">Police's</h5>
                         <h3 className="mb-0 fw-normal">
                         <span>
                           <CountUp end={Number(total_vendors) || 0} duration={2} enableScrollSpy scrollSpyOnce/>
