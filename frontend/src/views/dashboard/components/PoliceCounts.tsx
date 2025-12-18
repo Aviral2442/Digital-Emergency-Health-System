@@ -1,38 +1,45 @@
-import {Card, CardBody, CardFooter, ProgressBar} from 'react-bootstrap'
-import {LuUsers} from 'react-icons/lu'
+import { Card, CardBody, CardFooter, ProgressBar } from 'react-bootstrap'
+import { LuUsers } from 'react-icons/lu'
 import CountUp from "react-countup";
 import React from 'react'
+import axios from 'axios';
 
 const ActiveUsers = () => {
 
-    // const _baseURL = (import.meta as any).env?.VITE_PATH ?? "";
+    const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
-    const [vendors, _setVendors] = React.useState({
-        today_new_vendors: 22,
-        active_vendors: 2,
-        other_status_vendors: 20,
-        total_vendors: 22
+    const [policeCounts, setPoliceCounts] = React.useState({
+        police_total: 0,
+        onDuty_police: 0,
+        offDuty_police: 0,
+        active_police: 0
     })
+
     const [isLoading, setIsLoading] = React.useState(true)
 
-    const fetchVendorCounst = async () => {
-        try{
+    const fetchVendorCounts = async () => {
+        try {
             setIsLoading(true)
-            // const res = await axios.get(`${baseURL}/dashboard/get_total_active_other_status_vendor_counts`)
-            // console.log("API Response of VENDORS: ",res.data?.jsonData?.vendorCounts)
-            // setVendors(res.data?.jsonData?.vendorCounts || {})
-        } catch (error){
-            console.error("Error fetching VENDORS: ", error)
+            const res = await axios.get(`${baseURL}/dashboard/police_dashboard_counts`)
+            console.log("API Response of Police: ", res.data?.jsonData?.police_status_counts)
+            setPoliceCounts(res.data?.jsonData?.police_status_counts || {})
+        } catch (error) {
+            console.error("Error fetching POLICE COUNTS: ", error)
         } finally {
             setIsLoading(false)
         }
     }
 
     React.useEffect(() => {
-        fetchVendorCounst();
-    }, [])
+        fetchVendorCounts();
+    }, []);
 
-    const { active_vendors, other_status_vendors, total_vendors } = vendors;
+    const {
+        police_total,
+        onDuty_police,
+        offDuty_police,
+        active_police
+    } = policeCounts;
 
     if (isLoading) {
         return (
@@ -51,31 +58,31 @@ const ActiveUsers = () => {
                     <div>
                         <h5 className="text-uppercase fs-5 mb-2">Police's</h5>
                         <h3 className="mb-0 fw-normal">
-                        <span>
-                          <CountUp end={Number(total_vendors) || 0} duration={2} enableScrollSpy scrollSpyOnce/>
-                        </span>
+                            <span>
+                                <CountUp end={Number(police_total) || 0} duration={2} enableScrollSpy scrollSpyOnce />
+                            </span>
                         </h3>
                         <p className="text-muted mb-2">Total</p>
                     </div>
                     <div>
-                        <LuUsers className="text-muted fs-24 svg-sw-10"/>
+                        <LuUsers className="text-muted fs-24 svg-sw-10" />
                     </div>
                 </div>
 
-                <ProgressBar now={active_vendors} className="progress-lg mb-2"/>
+                <ProgressBar now={onDuty_police} className="progress-lg mb-2" />
 
                 <div className="d-flex justify-content-between">
                     <div>
                         <span className="text-muted">On Duty</span>
-                        <h5 className="mb-0">{active_vendors}</h5>
+                        <h5 className="mb-0">{onDuty_police}</h5>
                     </div>
                     <div className="text-end">
                         <span className="text-muted">Off Duty</span>
-                        <h5 className="mb-0">{other_status_vendors}</h5>
+                        <h5 className="mb-0">{offDuty_police}</h5>
                     </div>
                 </div>
             </CardBody>
-            <CardFooter className="text-muted text-center">{2} Active Data Currently We Have</CardFooter>
+            <CardFooter className="text-muted text-center">{active_police} Active Police</CardFooter>
         </Card>
     )
 }
