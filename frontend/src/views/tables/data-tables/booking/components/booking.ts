@@ -29,19 +29,20 @@ type AmbulanceBookingInfoType = {
     booking_schedule_time: string
     booking_pickup: string
     booking_drop: string
-    booking_status: number
+    booking_status: string
     booking_total_amount: string
     created_at: string
 }
 
 // Status map for ambulance bookings (matches backend)
-const statusMap: Record<number, [string, string]> = {
-    0: ["secondary", "Enquery"],
-    1: ["primary", "Confirm Booking"],
-    2: ["info", "Driver Assign"],
-    3: ["warning", "Invoice"],
-    4: ["success", "Complete"],
-    5: ["danger", "Cancel"],
+const statusMap: Record<string, [string, string]> = {
+    "0": ["secondary", "Enquery"],
+    "1": ["primary", "Confirm Booking"],
+    "2": ["info", "Driver Assign"],
+    "3": ["warning", "Invoice"],
+    "4": ["success", "Complete"],
+    "5": ["danger", "Cancel"],
+    "6": ["dark", "Future Booking"],
 };
 
 // BOOKING COLUMNS
@@ -106,7 +107,7 @@ export const bookingColumns = [
     //  },
     {
         data: 'booking_status',
-        defaultContent: '0',  // Changed from 0 to '0'
+        defaultContent: ' ',  // Changed from 0 to '0'
         render: (data: number) => {
             const [variant, text] = statusMap[data] || ["secondary", "Unknown"];
             return `<span class="badge badge-label badge-soft-${variant}">${text}</span>`;

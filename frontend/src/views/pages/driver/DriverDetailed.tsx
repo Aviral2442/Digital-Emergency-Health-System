@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Nav, Spinner} from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import DriverDetails from "@/components/Ambulance/driver/DriverDetails";
-import TransactionList from "@/components/Ambulance/driver/TransactionList";
+import DriverDetails from "@/components/driver/DriverDetails";
 
 const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
@@ -15,11 +14,6 @@ const DriverDetailed: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [driverData, setDriverData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // Transaction state
-  const [transLoading, setTransLoading] = useState<boolean>(false);
-  const [transactions, setTransactions] = useState<any[] | null>(null);
-  const [transError, setTransError] = useState<string | null>(null);
 
   // Fetch driver detail
   const fetchDriver = async () => {
@@ -44,29 +38,6 @@ const DriverDetailed: React.FC = () => {
     }
   };
 
-  // Fetch transactions with pagination
-  const fetchTransactions = async () => {
-    try {
-      setTransLoading(true);
-      setTransError(null);
-      if (!id) return;
-
-      const resp = await axios.get(
-        `${baseURL}/transaction/driver_transaction_data/${id}`
-      );
-      console.log("Transaction Response:", resp.data);
-
-      const transactionsData = resp.data?.jsonData?.driverTransactions;
-      setTransactions(transactionsData || []);
-    } catch (err: any) {
-      console.error("Failed to fetch transactions:", err);
-      setTransError(err?.message || "Failed to fetch transactions");
-      setTransactions(null);
-    } finally {
-      setTransLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (activeTab === 1 && !driverData && !loading) {
       fetchDriver();
@@ -79,15 +50,8 @@ const DriverDetailed: React.FC = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    if (activeTab === 2 && transactions === null && !transLoading) {
-      fetchTransactions();
-    }
-  }, [activeTab, id]);
-
   const tabs = [
     { eventKey: 1, title: "Driver" },
-    { eventKey: 2, title: "Transactions" },
   ];
 
   return (
@@ -117,16 +81,6 @@ const DriverDetailed: React.FC = () => {
             {activeTab === 1 && (
               <div>
                 <DriverDetails data={driverData} loading={loading} error={error} />
-              </div>
-            )}
-
-            {activeTab === 2 && (
-              <div>
-                <TransactionList
-                  data={transactions}
-                  loading={transLoading}
-                  error={transError}
-                />
               </div>
             )}
           </div>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { Container, Spinner, Nav } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import AmbulanceBookingDetailsForm from '@/components/Ambulance/booking/BookingDetails';
+import AmbulanceBookingDetailsForm from '@/components/booking/BookingDetails';
 
 const BookingDetails = () => {
   const baseURL = (import.meta as any).env?.VITE_PATH ?? "";

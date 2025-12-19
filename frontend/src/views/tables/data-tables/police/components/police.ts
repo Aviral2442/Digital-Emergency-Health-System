@@ -12,7 +12,7 @@ type PoliceInfoType = {
     police_created_partner_id: string
     police_profile_img: string
     created_at: string
-    police_status: number
+    police_status: string
     created_partner_name: string
     created_partner_mobile: string
 }
@@ -82,8 +82,12 @@ export const policeColumns = [
         data: 'police_status',
         render: (data: string) => {
             const statusMap: Record<string, { label: string; class: string }> = {
-                "0": { label: 'Verified', class: 'success' },
-                "1": { label: 'Blocked', class: 'danger' },
+                //0 for new police, 1 for active police, 2 for inactive, 3 for deleted police, 4 Applied for verification
+                "0": { label: 'New Police', class: 'info' },
+                "1": { label: 'Active Police', class: 'success' },
+                "2": { label: 'Inactive Police', class: 'warning' },
+                "3": { label: 'Deleted Police', class: 'danger' },
+                "4": { label: 'Applied for Verification', class: 'primary' },
             };
 
             const status = statusMap[data] || { label: 'Unknown', class: 'secondary' };

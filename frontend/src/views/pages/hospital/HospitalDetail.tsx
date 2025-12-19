@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import DetailPage from "@/components/DetailPage";
 import { Card } from "react-bootstrap";
-import { ColumnSizing } from "@tanstack/react-table";
+// import { ColumnSizing } from "@tanstack/react-table";
 
 const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
@@ -62,14 +62,18 @@ const HospitalDetail: React.FC = () => {
     {
       title: "Basic Info",
       fields: [
-        // { label: "Hospital ID", name: "hospital_id" },
-        { label: "Logo", name: "hospital_logo" },
-        { label: "Hospital Name", name: "hospital_name" },
-        // { label: "User ID", name: "hospital_user_id" },
-        { label: "User Name", name: "hospital_users_name" },
-        { label: "User Mobile", name: "hospital_users_mobile" },
-        // { label: "Name SKU", name: "hospital_name_sku" },
-        // removed unsupported type "image" to satisfy FieldConfig union
+       {
+          label: "Logo",
+          name: "hospital_logo",
+          cols: 3,
+          render: () => {
+            if (!hospital?.hospital_logo) return "No Image";
+            return `<img src="${baseURL}/${hospital.hospital_logo}" alt="Profile" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />`;
+          },
+        },
+        { label: "Hospital Name", name: "hospital_name", cols: 3 },
+        { label: "User Name", name: "hospital_users_name", cols: 3 },
+        { label: "User Mobile", name: "hospital_users_mobile", cols: 3 },
       ],
     },
     {

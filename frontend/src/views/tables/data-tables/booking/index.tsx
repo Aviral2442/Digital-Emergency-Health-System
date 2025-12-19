@@ -40,58 +40,7 @@ const tableConfig: Record<number, { endpoint: string; headers: string[] }> = {
       // "Remark",
       "Status",
     ],
-  },
-  2: {
-    endpoint: "/ambulance/get_regular_ambulance_booking_list",
-    headers: [
-      "S.No.",
-      "ID",
-      "Type",
-      "Consumer",
-      "Category",
-      "Schedule",
-      "Pickup",
-      "Drop",
-      "Amount",
-      "Created",
-      // "Remark",
-      "Status",
-    ],
-  },
-  3: {
-    endpoint: "/ambulance/get_rental_ambulance_booking_list",
-    headers: [
-      "S.No.",
-      "ID",
-      "Type",
-      "Consumer",
-      "Category",
-      "Schedule",
-      "Pickup",
-      "Drop",
-      "Amount",
-      "Created",
-      // "Remark",
-      "Status",
-    ],
-  },
-  4: {
-    endpoint: "/ambulance/get_bulk_ambulance_booking_list",
-    headers: [
-      "S.No.",
-      "ID",
-      "Type",
-      "Consumer",
-      "Category",
-      "Schedule",
-      "Pickup",
-      "Drop",
-      "Amount",
-      "Created",
-      // "Remark",
-      "Status",
-    ],
-  },
+  }
 };
 
 type ExportDataWithButtonsProps = {
@@ -140,6 +89,7 @@ const ExportDataWithButtons = ({
     { label: "Invoice", value: "invoice" },
     { label: "Complete", value: "complete" },
     { label: "Cancel", value: "cancel" },
+    { label: "Future Booking", value: "futureBooking" },
   ];
 
   const fetchData = async () => {
@@ -147,29 +97,13 @@ const ExportDataWithButtons = ({
     try {
       const params = getFilterParams(pageSize, filterParams);
       const res = await axios.get(`${baseURL}${endpoint}`, { params });
-      // console.log("API Response:", res.data);
+      console.log("API Response:", res.data);
 
       let dataArray: any[] = [];
-      let bookings_id: any[] = [];
 
       if (tabKey === 1) {
         dataArray = res.data?.jsonData?.booking_list || [];
-        bookings_id = res.data?.jsonData?.booking_list?.booking_id || [];
-      } else if (tabKey === 2) {
-        dataArray = res.data?.jsonData?.regular_ambulance_booking_list || [];
-        bookings_id =
-          res.data?.jsonData?.regular_ambulance_booking_list?.booking_id || [];
-      } else if (tabKey === 3) {
-        dataArray = res.data?.jsonData?.rental_ambulance_booking_list || [];
-        bookings_id =
-          res.data?.jsonData?.rental_ambulance_booking_list?.booking_id || [];
-      } else if (tabKey === 4) {
-        dataArray = res.data?.jsonData?.bulk_ambulance_booking_list || [];
-        bookings_id =
-          res.data?.jsonData?.bulk_ambulance_booking_list?.booking_id || [];
       }
-      console.log("Bookings IDs:", bookings_id);
-
       // Ensure data is an array and has proper structure
       const validData = Array.isArray(dataArray) ? dataArray : [];
       setTableData(validData);
@@ -237,12 +171,6 @@ const ExportDataWithButtons = ({
           <div className="w-100">
             {tabKey === 1
               ? "Manage Bookings"
-              : tabKey === 2
-              ? "Regular Ambulance Bookings"
-              : tabKey === 3
-              ? "Rental Ambulance Bookings"
-              : tabKey === 4
-              ? "Bulk Ambulance Bookings"
               : ""}
           </div>
         }

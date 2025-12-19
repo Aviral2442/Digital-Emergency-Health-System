@@ -83,8 +83,8 @@ const ExportDataWithButtons = ({
   const { endpoint, columns, headers } = tableConfig[tabKey];
 
   const StatusFilterOptions = [
-    { label: "Verified", value: "0" },
-    { label: "Blocked", value: "1" },
+    { label: "Verified", value: "varified" },
+    { label: "Blocked", value: "block" },
   ];
 
   const fetchData = async () => {

@@ -32,6 +32,7 @@ export const getAmbulanceBookingListService = async (filters?: {
                 invoice: "booking_view.booking_status = 3",
                 complete: "booking_view.booking_status = 4",
                 cancel: "booking_view.booking_status = 5",
+                futureBooking: "booking_view.booking_status = 6",
             };
 
             const condition = statusConditionMap[filters.status];
@@ -75,7 +76,7 @@ export const getAmbulanceBookingListService = async (filters?: {
                 booking_view.created_at
             FROM booking_view
             ${finalWhereSQL}
-            WHERE booking_view.booking_status != 0
+            ${finalWhereSQL ? 'AND' : 'WHERE'} booking_view.booking_status != 0
             ORDER BY booking_view.booking_id DESC
             LIMIT ? OFFSET ?
         `;
