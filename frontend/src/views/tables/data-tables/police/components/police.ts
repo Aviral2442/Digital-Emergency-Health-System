@@ -38,28 +38,40 @@ export const getPoliceList = async () => {
 export const policeColumns = [
     { data: 'police_id' },
     {
+        data: 'police_created_by',
+        render: (data: string) => {
+            switch(data) {
+                case '0':
+                    return 'Self';
+                case '1':
+                    return 'Partner';
+                    default:
+                    return 'Unknown';
+            }
+        }
+    },
+    {
         data: 'police_profile_img',
         render: (data: string | "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-photo-image-illustration-285843601.jpg") => {
-            return data ? `<img src="${data} " alt="police" class="rounded-circle" width="40" height="40" />` : '';
+            return data ? `<img src="https://appdata.medcab.in/${data} " alt="police" class="rounded-circle" width="20px" height="20px" loading="lazy" />` : '';
         }
     },
     { data: 'police_name',
         render: (data: string, _type: string, row: PoliceInfoType) => {
-            return `${data} ${row.police_last_name}`;
+            return `${data} ${row.police_last_name}` || ' ';
         }
      },
-     { data: 'police_created_partner_id' },
      {
         data: 'created_partner_name',
+        defaultContent:  '',
         render: (data: string, _type: string, row: PoliceInfoType) => {
-            return `${data} (${row.created_partner_mobile})`;
+            if(row.created_partner_name !== null ){
+                return `${data} (${row.created_partner_mobile})` || ' ';
+            }
         }
      },
     { data: 'police_mobile' },
     { data: 'police_wallet_amount' },
-    {
-        data: 'police_created_by'
-    },
     {
         data: 'created_at',
         render: (data: string) => {
@@ -82,6 +94,6 @@ export const policeColumns = [
 
 // Export table data structure
 export const policeTableData: TableType<PoliceInfoType> = {
-    header: ["S.No.", 'ID', 'Profile', 'Name', 'Partner ID', 'Created Partner', 'Mobile', 'Amount', 'By', 'Created', 'Status'],
+    header: ["S.No.", 'ID', 'By', 'Profile', 'Name', 'Created Partner', 'Mobile', 'Amount', 'Created', 'Status'],
     body: policeRows,
 };

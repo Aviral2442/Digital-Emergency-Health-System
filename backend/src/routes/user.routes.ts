@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCityController, getStateController, getStateIdByCityIdController, getUsers } from "../controllers/user.controller";
+import { getCityController, getStateController, getUsers } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -9,6 +9,5 @@ router.get("/", getUsers);
 // STATE AND CITY ROUTES
 router.get("/get_states", getStateController);
 router.get("/get_cities/:stateId", getCityController);
-router.get("/get_state_id_by_city_id/:cityId", getStateIdByCityIdController);
 
 export default router;

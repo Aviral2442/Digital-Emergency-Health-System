@@ -20,7 +20,7 @@ const ActiveUsers = () => {
         try{
             setIsLoading(true)
             const res = await axios.get(`${baseURL}/dashboard/booking_dashboard_counts`)
-            console.log("API Response of Booking: ",res.data?.jsonData?.completed_ongoing_cancelled_counts)
+            // console.log("API Response of Booking: ",res.data?.jsonData?.completed_ongoing_cancelled_counts)
             setBookings(res.data?.jsonData?.completed_ongoing_cancelled_counts || {})
         } catch (error){
             console.error("Error fetching BOOKINGS: ", error)

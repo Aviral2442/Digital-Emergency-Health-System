@@ -35,7 +35,7 @@ export const hospitalColumns = [
     {
         data: 'hospital_logo',
         render: (data: string | "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-photo-image-illustration-285843601.jpg") => {
-            return data ? `<img src="${data} " alt="hospital" class="rounded-circle" width="40" height="40" />` : '';
+            return data ? `<img src="https://appdata.medcab.in/${data} " alt="hospital" class="rounded-circle" width="20px" height="20px" />` : '';
         }
     },
     { data: 'hospital_name' },

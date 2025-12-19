@@ -14,59 +14,23 @@ const Calendar = lazy(() => import("@/views/apps/calendar"));
 const Directory = lazy(() => import("@/views/apps/directory"));
 
 
-// Dashboard Pages
-const AmbulanceDashboard = lazy(() => import('@/views/pages/Dashboard/ambulance'))
-
-
 // Pages
 const EmptyPage = lazy(() => import("@/views/pages/empty"));
 const Invoice = lazy(() => import("@/views/pages/invoice"));
 const Pricing = lazy(() => import("@/views/pages/pricing"));
 const TermsConditions = lazy(() => import("@/views/pages/terms-conditions"));
 const Timeline = lazy(() => import("@/views/pages/timeline"));
-const ConsumerList = lazy(() => import('@/views/pages/consumer'))
-const ConsumerDetails = lazy(() => import('@/views/pages/consumer/consumerDetails'))
-const BlogList = lazy(() => import('@/views/pages/content-writing/blogs'))
-const AddBlogs = lazy(() => import('@/views/pages/content-writing/blogs/components/AddBlogs'))
-const CityList = lazy(() => import('@/views/pages/content-writing/city'))
-const AddCity = lazy(() => import('@/views/pages/content-writing/city/components/AddCity'))
-const EditCity = lazy(() => import('@/views/pages/content-writing/city/components/AddCity'))
-const DriverEmergency = lazy(() => import('@/views/pages/emergency/driver'))
-const ConsumerEmergency = lazy(() => import('@/views/pages/emergency/consumer'))
 
 
-const DriverList = lazy(() => import('@/views/pages/ambulance/driver'))
-const DriverDetails = lazy(() => import('@/views/pages/ambulance/driver/DriverDetailed'));
-const AmbulanceBooking = lazy(() => import('@/views/pages/ambulance/booking'))
-const AmbulanceBookingDetails = lazy(() => import('@/views/pages/ambulance/booking/BookingDetails'));
+const DriverList = lazy(() => import('@/views/pages/driver'))
+const DriverDetails = lazy(() => import('@/views/pages/driver/DriverDetailed'));
+const AmbulanceBooking = lazy(() => import('@/views/pages/booking'))
+const AmbulanceBookingDetails = lazy(() => import('@/views/pages/booking/BookingDetails'));
 const HospitalList = lazy(() => import('@/views/pages/hospital'))
 const HospitalDetail = lazy(() => import('@/views/pages/hospital/HospitalDetail'))
 const PoliceList = lazy(() => import('@/views/pages/police')) 
 const PoliceAdd = lazy(() => import('@/views/pages/police/Components/AddPolice'))
 const PoliceDetail = lazy(() => import('@/views/pages/police/PoliceDetail'))
-
-//amblulance Pages
-const AmbulanceList = lazy(() => import('@/views/pages/ambulance/category'))
-const PartnerList = lazy(() => import('@/views/pages/ambulance/partner'))
-const DriverDuty = lazy(() => import('@/views/pages/ambulance/driver-duty'))
-const DriverDutyDetails = lazy(() => import('@/views/pages/ambulance/driver-duty/components/DriverDuty'))
-const AddDriver = lazy(() => import('@/views/pages/ambulance/driver/components/AddDriver'))
-const EditDriver = lazy(() => import('@/views/pages/ambulance/driver/components/AddDriver'))
-const DriverDutyMap = lazy(() => import('@/views/pages/ambulance/driver-duty/components/DriverDutyMap'))
-const AddPartner = lazy(() => import('@/views/pages/ambulance/partner/components/AddPartner'));
-const EditPartner = lazy(() => import('@/views/pages/ambulance/partner/components/AddPartner'));
-const PartnerDetails = lazy(() => import('@/views/pages/ambulance/partner/PartnerDetailed'));
-const VehicalList = lazy(() => import('@/views/pages/ambulance/vehicle'));
-const AddVehicle = lazy(() => import('@/views/pages/ambulance/vehicle/components/AddVehicle'));
-const EditVehicle = lazy(() => import('@/views/pages/ambulance/vehicle/components/AddVehicle'));
-const DriverTransactionDetails = lazy(() => import('@/views/pages/ambulance/driver/'));
-
-
-//transaction Pages
-const ConsumerTransactionList = lazy(() => import('@/views/pages/transaction/Consumer'));
-const DriverTransactionList = lazy(() => import('@/views/pages/transaction/ambulance/Driver'));
-const PartnerTransactionList = lazy(() => import('@/views/pages/transaction/ambulance/Partner'));
-const VendorTransactionList = lazy(() => import('@/views/pages/transaction/manpower/Vendor'));
 
 // Auth
 const AuthSignIn = lazy(() => import("@/views/auth/sign-in"));
@@ -144,7 +108,6 @@ const errorRoutes: RouteObject[] = [
 
 const dashboardRoutes: RouteObject[] = [
   { path: "/dashboard", element: <Dashboard /> },
-  { path: "/ambulance-dashboard", element: <AmbulanceDashboard /> },
 ];
 
 const appsRoutes: RouteObject[] = [
@@ -159,17 +122,6 @@ const pagesRoutes: RouteObject[] = [
   { path: "/pages/pricing", element: <Pricing /> },
   { path: "/pages/terms-conditions", element: <TermsConditions /> },
   { path: "/pages/timeline", element: <Timeline /> },
-
-  { path: "/consumer-list", element: <ConsumerList/>},
-  { path: "/consumer-details/:id", element: <ConsumerDetails/> },
-  { path: "/content-seo/blogs", element: <BlogList/> },
-  { path: "/add-blog", element: <AddBlogs/> },
-  { path: "/edit-blog/:id", element: <AddBlogs/> },
-  { path: "/city/:section", element: <CityList/> },
-  { path: "/city/:section/add-city", element: <AddCity/> },
-  { path: "/city/:section/edit-city/:id", element: <EditCity/> },
-  { path: "/emergency/driver", element: <DriverEmergency/> },
-  { path: "/emergency/consumer", element: <ConsumerEmergency/> },
   
   
   { path: "/driver", element: <DriverList/> },
@@ -180,30 +132,9 @@ const pagesRoutes: RouteObject[] = [
   { path: "/police/add", element: <PoliceAdd/> },
   { path: "/police/edit/:id", element: <PoliceAdd/> },
   { path: "/police-detail/:id", element: <PoliceDetail/> },
-  //ambulance Pages
-  { path: "/ambulance/partner", element: <PartnerList/> },
-  { path: "/ambulance/add-driver", element: <AddDriver/> },
-  { path: "/ambulance/category", element: <AmbulanceList/> },
-  { path: "/ambulance/driver-duty", element: <DriverDuty/> },
-  { path: "/ambulance/driver-duty/:id", element: <DriverDutyDetails/> },
-  { path: "/ambulance/driver-duty-map", element: <DriverDutyMap/> },
-  { path: "/ambulance/partner/add-partner", element: <AddPartner/> },
-  { path: "/ambulance/vehicle", element: <VehicalList/> },
-  { path: "/ambulance/vehicle/add-vehicle", element: <AddVehicle/> },
-  { path: "/ambulance/vehicle/edit/:id", element: <EditVehicle/> },
   { path: "/ambulance/booking/details/:id", element: <AmbulanceBookingDetails/> },
-  { path: "/edit-driver/:id", element: <EditDriver/> },
-  { path: "/edit-partner/:id", element: <EditPartner/> },
   { path: "/driver-detail/:id", element: <DriverDetails/> },
-  { path: "/partner-detail/:id", element: <PartnerDetails/> },
-  { path: "/driver-transaction-details/:id", element: <DriverTransactionDetails/> },
 
-
-  //transaction pages
-  { path: "/transaction/consumer", element: <ConsumerTransactionList/> },
-  { path: "/transaction/driver", element: <DriverTransactionList/> },
-  { path: "/transaction/partner", element: <PartnerTransactionList/> },
-  { path: "/transaction/vendor", element: <VendorTransactionList/> },
 ];
 
 const uiRoutes: RouteObject[] = [ 

@@ -74,6 +74,7 @@ export const getPoliceListService = async (filters: {
                 police.police_status,
                 partner.partner_f_name AS created_partner_name,
                 partner.partner_mobile AS created_partner_mobile,
+                city.city_name,
                 (
                     SELECT remark_text
                     FROM remark_data
@@ -83,6 +84,7 @@ export const getPoliceListService = async (filters: {
                 ) AS remark_text
             FROM police
             LEFT JOIN partner ON police.police_created_by = 1 AND police.police_created_partner_id = partner.partner_id
+            LEFT JOIN city ON police.police_city_id = city.city_id
             ${finalWhereSQL}
             ORDER BY police.police_id DESC
             LIMIT ? OFFSET ?;

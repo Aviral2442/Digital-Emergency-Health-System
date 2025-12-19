@@ -84,7 +84,7 @@ const HospitalDetail: React.FC = () => {
         {
           label: "Address",
           name: "hospital_address",
-          type: "textarea",
+          type: "textarea" as const,
           rows: 3,
         },
         { label: "Latitude", name: "hospital_lat" },
@@ -97,12 +97,12 @@ const HospitalDetail: React.FC = () => {
         {
           label: "Updated Timestamp",
           name: "hospital_updated_time_stamp",
-          type: "datetime-local",
+          type: "datetime-local" as const,
         },
         {
           label: "Added Timestamp",
           name: "hospital_added_timestamp",
-          type: "datetime-local",
+          type: "datetime-local" as const,
         },
         { 
           label: "Status", 
@@ -115,12 +115,12 @@ const HospitalDetail: React.FC = () => {
       title: "Verification",
       fields: [
         { label: "Verified By", name: "verify_by" },
-        { label: "Verify Date", name: "verify_date", type: "datetime-local" },
+        { label: "Verify Date", name: "verify_date", type: "datetime-local" as const },
         { label: "Verify Status", name: "hospital_verify_status" },
         {
           label: "Hospital Verify Date",
           name: "hospital_verify_date",
-          type: "datetime-local",
+          type: "datetime-local" as const,
         },
       ],
     },

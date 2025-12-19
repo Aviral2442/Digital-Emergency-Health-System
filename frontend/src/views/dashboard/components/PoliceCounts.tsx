@@ -21,7 +21,7 @@ const ActiveUsers = () => {
         try {
             setIsLoading(true)
             const res = await axios.get(`${baseURL}/dashboard/police_dashboard_counts`)
-            console.log("API Response of Police: ", res.data?.jsonData?.police_status_counts)
+            // console.log("API Response of Police: ", res.data?.jsonData?.police_status_counts)
             setPoliceCounts(res.data?.jsonData?.police_status_counts || {})
         } catch (error) {
             console.error("Error fetching POLICE COUNTS: ", error)
