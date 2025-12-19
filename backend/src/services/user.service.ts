@@ -56,3 +56,88 @@ export const getCityService = async (stateId: number) => {
     throw new ApiError(500, "Get City Service Error On Fetching");
   }
 };
+
+// GET ALL CITIES SERVICE
+export const getCitiesService = async () => {
+  try {
+
+    const [rows]: any = await db.query(
+      `SELECT city_id, city_name FROM city ORDER BY city_name ASC`,
+    )
+
+    return ({
+      status: 200,
+      message: "City list fetched successfully",
+      jsonData: {
+        city_list: rows
+      }
+    });
+
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, "Get City Service Error On Fetching");
+  }
+};
+
+// GET PARTNER SERVICES
+export const getPartnerServices = async () => {
+
+    try {
+
+        const query = `
+            SELECT 
+                partner_id,
+                partner_f_name,
+                partner_l_name,
+                partner_mobile,
+                partner_wallet,
+                partner_profile_img,
+                partner_created_by,
+                partner_city_id,
+                partner_registration_step,
+                created_at,
+                partner_status
+            FROM partner
+            ORDER BY partner_id DESC;
+        `;
+        const [rows]: any = await db.query(query);
+
+        return {
+            status: 200,
+            message: 'Partner List Fetch Successful',
+            jsonData: {
+                partners: rows
+            }
+        };
+
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(500, 'Failed to retrieve partner services');
+    }
+
+};
+
+// GET STATE ID BY CITY ID SERVICE
+export const getStateIdByCityIdService = async (cityId: number) => {
+  try {
+
+    if (isNaN(cityId)) {
+      throw new ApiError(400, "Invalid City ID");
+    }
+
+    const [rows]: any = await db.query(
+      `SELECT city_state FROM city WHERE city_id = ?`,
+      [cityId]
+    );
+
+    if (rows.length === 0) {
+      throw new ApiError(404, "City not found");
+    }
+
+    return rows[0].city_state;
+
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, "Get State ID By City ID Service Error On Fetching");
+  }
+};

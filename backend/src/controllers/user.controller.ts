@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { getAllUsers, getCitiesService, getCityService, getStateService, getPartnerServices } from "../services/user.service";
-import { getAllUsers, getCityService, getStateIdByCityIdService, getStateService } from "../services/user.service";
 import { ApiError } from "../utils/api-error";
+import { getAllUsers, getCitiesService, getCityService, getPartnerServices, getStateIdByCityIdService, getStateService } from "../services/user.service";
 
-// Get All Users
+// GET USERS CONTROLLER
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await getAllUsers();
@@ -13,7 +12,7 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-// Get State Controller
+// GET STATE CONTROLLER
 export const getStateController = async (req: Request, res: Response) => {
   try {
     const states = await getStateService();
@@ -23,7 +22,7 @@ export const getStateController = async (req: Request, res: Response) => {
   }
 };
 
-// Get City Controller
+// GET CITY CONTROLLER
 export const getCityController = async (req: Request, res: Response) => {
   try {
     const stateId = parseInt(req.params.stateId);
@@ -34,7 +33,7 @@ export const getCityController = async (req: Request, res: Response) => {
   }
 };
 
-
+// GET CITIES CONTROLLER
 export const getCitiesController = async (req: Request, res: Response) => {
   try {
     const cities = await getCitiesService();
@@ -44,9 +43,8 @@ export const getCitiesController = async (req: Request, res: Response) => {
   }
 };
 
-
+// GET PARTNERS CONTROLLER
 export const getPartnersController = async (req: Request, res: Response) => {
-
   try {
 
     const result = await getPartnerServices();
@@ -54,13 +52,12 @@ export const getPartnersController = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch partners" });
   }
-
 };
 
 // Get State ID by City ID Controller
 export const getStateIdByCityIdController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const cityId = parseInt(req.params.cityId); 
+    const cityId = parseInt(req.params.cityId);
     const result = await getStateIdByCityIdService(cityId);
     res.json(result);
   } catch (error) {
