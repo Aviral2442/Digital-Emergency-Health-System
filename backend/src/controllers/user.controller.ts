@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getAllUsers, getCitiesService, getCityService, getStateService, getPartnerServices } from "../services/user.service";
+import { getAllUsers, getCityService, getStateIdByCityIdService, getStateService } from "../services/user.service";
 import { ApiError } from "../utils/api-error";
 
 // Get All Users
@@ -54,4 +55,15 @@ export const getPartnersController = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch partners" });
   }
 
+};
+
+// Get State ID by City ID Controller
+export const getStateIdByCityIdController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cityId = parseInt(req.params.cityId); 
+    const result = await getStateIdByCityIdService(cityId);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 };
