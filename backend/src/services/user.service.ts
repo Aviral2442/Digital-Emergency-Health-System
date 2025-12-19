@@ -56,3 +56,33 @@ export const getCityService = async (stateId: number) => {
     throw new ApiError(500, "Get City Service Error On Fetching");
   }
 };
+
+
+export const getStateIdByCityIdService = async (cityId: number) => {
+  try {
+
+    if (isNaN(cityId)) {
+      throw new ApiError(400, "Invalid City ID");
+    }
+
+    const [rows]: any = await db.query(
+      `SELECT city_state FROM city WHERE city_id = ?`,
+      [cityId]
+    )
+
+    if (rows.length === 0) {
+      throw new ApiError(404, "City Not Found");
+    }
+
+    return ({
+      status: 200,
+      message: "State ID fetched successfully",
+      jsonData: {
+        state_id: rows[0].city_state
+      }
+    });
+
+  } catch (error) {
+    throw new ApiError(500, "Get State ID By City ID Service Error On Fetching");
+  }
+};
