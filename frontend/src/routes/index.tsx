@@ -199,7 +199,7 @@ const allRoutes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <Navigate to="/manpower-dashboard" replace />,
+        element: <Navigate to="/dashboard" replace />,
       },
       ...dashboardRoutes,
       ...appsRoutes,

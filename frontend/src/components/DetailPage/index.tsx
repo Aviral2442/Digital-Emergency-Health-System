@@ -83,7 +83,7 @@ const Field: React.FC<FieldProps> = ({
   type = "text",
   rows = 3,
   options = [],
-  render, // Add this parameter
+  render,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value?.toString() || "");
@@ -200,13 +200,20 @@ const Field: React.FC<FieldProps> = ({
           </>
         ) : (
           <div className="d-flex align-items-center flex-grow-1 border rounded">
-            <Form.Control
-              readOnly
-              plaintext
-              value={displayValue}
-              as={type === "textarea" ? "textarea" : "input"}
-              className="flex-grow-1 px-2 input-field"
-            />
+            {render ? (
+              <div 
+                className="flex-grow-1 px-2 py-2"
+                dangerouslySetInnerHTML={{ __html: displayValue }}
+              />
+            ) : (
+              <Form.Control
+                readOnly
+                plaintext
+                value={displayValue}
+                as={type === "textarea" ? "textarea" : "input"}
+                className="flex-grow-1 px-2 input-field"
+              />
+            )}
             {editable && onEdit && (
               <button
                 onClick={() => setIsEditing(true)}

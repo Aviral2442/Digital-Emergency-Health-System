@@ -42,7 +42,7 @@ export const userDropdownItems: UserDropdownItemType[] = [
 ]
 
 export const menuItems: MenuItemType[] = [
-  { key: 'manpower-dashboard', label: 'Dashboard', icon: LuCircleGauge, url: '/dashboard' },
+  { key: 'dashboard', label: 'Dashboard', icon: LuCircleGauge, url: '/dashboard' },
   { key: '', label: 'Police', icon: LuShield, url: '/police' },
   { key: '', label: 'Hospitals', icon: LuHospital, url: '/hospital' },
   { key: '', label: 'Drivers', icon: LuCar, url: '/driver' },

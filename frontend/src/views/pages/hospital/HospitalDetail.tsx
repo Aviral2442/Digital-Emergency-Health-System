@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import DetailPage from "@/components/DetailPage";
 import { Card } from "react-bootstrap";
+import { ColumnSizing } from "@tanstack/react-table";
 
 const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
 
@@ -61,44 +62,43 @@ const HospitalDetail: React.FC = () => {
     {
       title: "Basic Info",
       fields: [
-        { label: "Hospital ID", name: "hospital_id" },
-        { label: "User ID", name: "hospital_user_id" },
+        // { label: "Hospital ID", name: "hospital_id" },
+        { label: "Logo", name: "hospital_logo" },
         { label: "Hospital Name", name: "hospital_name" },
+        // { label: "User ID", name: "hospital_user_id" },
+        { label: "User Name", name: "hospital_users_name" },
+        { label: "User Mobile", name: "hospital_users_mobile" },
         // { label: "Name SKU", name: "hospital_name_sku" },
         // removed unsupported type "image" to satisfy FieldConfig union
-        { label: "Logo", name: "hospital_logo" },
       ],
     },
     {
       title: "Contact & Address",
       fields: [
-        { label: "Pincode", name: "hospital_pincode" },
-        { label: "Contact No", name: "hospital_contact_no" },
-        { label: "Alt Contact No", name: "hospital_alt_contact_no" },
+        { label: "Pincode", name: "hospital_pincode", cols: 2},
+        { label: "Contact No", name: "hospital_contact_no", cols: 2},
+        { label: "Alt Contact No", name: "hospital_alt_contact_no", cols: 2},
         {
           label: "Service Status",
           name: "hospital_service_status",
           render: hospitalServiceStatus,
+          cols: 2
         },
-        { label: "City", name: "city_name" },
+        { label: "City", name: "city_name", cols:2 },
+        { label: "Latitude", name: "hospital_lat", cols: 2 },
+        { label: "Longitude", name: "hospital_long", cols: 2 },
         {
           label: "Address",
           name: "hospital_address",
-          type: "textarea" as const,
-          rows: 3,
+          // type: "textarea" as const,
+          // rows: 3,
+          cols: 6,
         },
-        { label: "Latitude", name: "hospital_lat" },
-        { label: "Longitude", name: "hospital_long" },
       ],
     },
     {
       title: "Timestamps & Status",
       fields: [
-        {
-          label: "Updated Timestamp",
-          name: "hospital_updated_time_stamp",
-          type: "datetime-local" as const,
-        },
         {
           label: "Added Timestamp",
           name: "hospital_added_timestamp",
@@ -123,22 +123,7 @@ const HospitalDetail: React.FC = () => {
           type: "datetime-local" as const,
         },
       ],
-    },
-    {
-      title: "Sub-directory & DB",
-      fields: [
-        { label: "Sub Directory", name: "hospital_sub_directory" },
-        { label: "SD DB Name", name: "hospital_sd_db_name" },
-        { label: "SD DB User", name: "hospital_sd_db_user" },
-        { label: "SD DB Password", name: "hospital_sd_db_password" },
-        { label: "SD Admin", name: "hospital_sd_admin" },
-        { label: "SD Admin Password", name: "hospital_sd_admin_password" },
-      ],
-    },
-    {
-      title: "User",
-      fields: [{ label: "Hospital Users Name", name: "hospital_users_name" }],
-    },
+    }
   ];
 
   return (

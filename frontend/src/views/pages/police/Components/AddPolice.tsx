@@ -16,7 +16,7 @@ const policeValidationSchema = Yup.object({
   police_dob: Yup.date().required("Date of birth is required"),
   police_gender: Yup.string().required("Gender is required"),
   police_state: Yup.string().required("State is required"),
-  police_city_id: Yup.number().required("City is required"),
+  police_city_id: Yup.string().required("City is required"),
   // police_created_by: Yup.number().required("Created by is required"),
   // police_created_partner_id: Yup.number().required("Partner ID is required"),
 });
@@ -178,6 +178,7 @@ const AddPolice = () => {
         );
       }
 
+      console.log("Police saved successfully:", response.data);
       if (response.data.status === 201 || response.data.status === 200) {
         navigate("/police");
       }
@@ -245,6 +246,7 @@ const AddPolice = () => {
                       </Form.Label>
                       <Form.Control
                         type="file"
+                        name="police_profile_img"
                         accept="image/*"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           handleImageChange(e, setFieldValue)
@@ -494,6 +496,7 @@ const AddPolice = () => {
               <Col lg={12}>
                 <div className="d-flex gap-2 justify-content-end">
                   <button
+                    type="button"
                     className="px-3 rounded text-black"
                     onClick={() => navigate("/police")}
                     disabled={submitting}

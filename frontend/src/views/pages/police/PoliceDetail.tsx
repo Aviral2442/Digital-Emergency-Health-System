@@ -15,9 +15,7 @@ const PoliceDetail: React.FC = () => {
     if (!id) return;
     const fetchPolice = async () => {
       try {
-        const resp = await axios.get(
-          `${baseURL}/police/police_all_data/${id}`
-        );
+        const resp = await axios.get(`${baseURL}/police/police_all_data/${id}`);
         console.log("Police detail response:", resp.data);
         const policeData = resp.data?.jsonData?.police || resp.data;
         setPolice(policeData);
@@ -34,77 +32,118 @@ const PoliceDetail: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (!police) return <div>No police data found</div>;
 
+  const PoliceCreatedBy = [
+    { value: "0", label: "Self" },
+    { value: "1", label: "Partner" },
+  ];
+
+  const OTPVerification = [
+    { value: "0", label: "Verified" },
+    { value: "1", label: "Un-Verified" },
+  ];
+
+  const PoliceStatus = [
+    { value: "0", label: "New Police" },
+    { value: "1", label: "Active Police" },
+    { value: "2", label: "Inactive Police" },
+    { value: "3", label: "Deleted Police" },
+    { value: "4", label: "Applied for Verification" },
+  ];
+
+  const BookingStatus = [
+    { value: "0", label: "Free" },
+    { value: "1", label: "In Booking" },
+  ];
+
   const sections = [
     {
       title: "Basic Information",
       fields: [
-        { label: "Police ID", name: "police_id" },
-        { label: "First Name", name: "police_name" },
-        { label: "Last Name", name: "police_last_name" },
-        { label: "Mobile", name: "police_mobile", type: "tel" as const },
-        { label: "Wallet Amount", name: "police_wallet_amount", type: "number" as const },
-        { label: "Date of Birth", name: "police_dob", type: "date" as const },
-        { label: "Gender", name: "police_gender" },
-        { label: "City Name", name: "city_name" },
+        {
+          label: "Profile Image",
+          name: "police_profile_img",
+          cols: 3,
+          render: () => {
+            if (!police?.police_profile_img) return "No Image";
+            return `<img src="${baseURL}/${police.police_profile_img}" alt="Profile" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />`;
+          },
+        },
+        { label: "First Name", name: "police_name", cols: 3 },
+        { label: "Last Name", name: "police_last_name", cols: 3 },
+        {
+          label: "Mobile",
+          name: "police_mobile",
+          type: "tel" as const,
+          cols: 3,
+        },
+        {
+          label: "Wallet Amount",
+          name: "police_wallet_amount",
+          type: "number" as const,
+          cols: 3,
+        },
+        {
+          label: "Date of Birth",
+          name: "police_dob",
+          type: "date" as const,
+          cols: 3,
+        },
+        { label: "Gender", name: "police_gender", cols: 3 },
+        { label: "City Name", name: "city_name", cols: 3 },
+        {
+          label: "Created By",
+          name: "police_created_by",
+          type: "select" as const,
+          options: PoliceCreatedBy,
+          cols: 3,
+        },
+        {
+          label: "Status",
+          name: "police_status",
+          type: "select" as const,
+          options: PoliceStatus,
+          cols: 3,
+        },
+        {
+          label: "Created At",
+          name: "created_at",
+          type: "datetime-local" as const,
+          cols: 3,
+        },
       ],
     },
     {
-      title: "Vehicle Assignment",
+      title: "Vehicle and Partner Details",
       fields: [
-        { label: "Assigned Vehicle ID", name: "police_assigned_vehicle_id" },
-        { label: "Vehicle Name", name: "v_vehicle_name" },
-        { label: "Vehicle RC Number", name: "vehicle_rc_number" },
-      ],
-    },
-    {
-      title: "Partner Information",
-      fields: [
-        { label: "Created By", name: "police_created_by" },
-        { label: "Created Partner ID", name: "police_created_partner_id" },
-        { label: "Partner Full Name", name: "partner_full_name" },
-        { label: "Partner Mobile", name: "partner_mobile", type: "tel" as const },
-        { label: "Partner Auth Key", name: "partner_auth_key" },
+        // { label: "Assigned Vehicle ID", name: "police_assigned_vehicle_id" },
+        { label: "Vehicle Name", name: "v_vehicle_name", cols: 3 },
+        { label: "Vehicle RC Number", name: "vehicle_rc_number", cols: 3 },
+        { label: "Partner Full Name", name: "partner_full_name", cols: 3 },
+        {
+          label: "Partner Mobile",
+          name: "partner_mobile",
+          type: "tel" as const,
+          cols: 3,
+        },
       ],
     },
     {
       title: "Registration & Status",
       fields: [
-        { label: "Registration Step", name: "police_registration_step" },
-        { label: "OTP Verification", name: "police_otp_verification" },
-        { label: "Duty Status", name: "police_duty_status" },
-        { label: "Status", name: "police_status" },
-        { label: "On Booking Status", name: "police_on_booking_status" },
-        { label: "Auth Key", name: "police_auth_key" },
-      ],
-    },
-    {
-      title: "Statistics & Performance",
-      fields: [
-        { label: "Total Rides Till Today", name: "police_total_ride_till_today", type: "number" as const },
-        { label: "Rating", name: "police_rating", type: "number" as const },
+        // { label: "Registration Step", name: "police_registration_step" },
         {
-          label: "Last Booking Notified Time",
-          name: "police_last_booking_notified_time",
-          type: "datetime-local" as const,
+          label: "OTP Verification",
+          name: "police_otp_verification",
+          type: "select" as const,
+          options: OTPVerification,
         },
-      ],
-    },
-    {
-      title: "Verification & Bonus",
-      fields: [
-        { label: "Verified By", name: "verify_by" },
-        { label: "Verify Date", name: "police_verify_date", type: "datetime-local" as const },
-        { label: "Join Bonus Status", name: "join_bonus_status" },
-        { label: "Join Bonus Time", name: "join_bonus_time", type: "datetime-local" as const },
-      ],
-    },
-    {
-      title: "Technical Information",
-      fields: [
-        { label: "FCM Token", name: "police_fcm_token" },
-        { label: "Profile Image", name: "police_profile_img" },
-        { label: "Created At", name: "created_at", type: "datetime-local" as const },
-        { label: "Updated At", name: "updated_at", type: "datetime-local" as const },
+        {
+          label: "On Booking Status",
+          name: "police_on_booking_status",
+          type: "select" as const,
+          options: BookingStatus,
+        },
+        // { label: "Auth Key", name: "police_auth_key" },
       ],
     },
   ];
@@ -121,6 +160,12 @@ const PoliceDetail: React.FC = () => {
           </div>
           <div className="h5 mb-0 fs-4 fw-semibold">
             {police?.police_name || ""} {police?.police_last_name || ""}
+          </div>
+          <div>
+            <span className="h4 fw-semibold fs-4">Duty:</span>{" "}
+            <strong className="fs-4 text-muted">
+              {police?.police_duty_status || "N/A"}
+            </strong>
           </div>
         </Card.Body>
       </Card>
