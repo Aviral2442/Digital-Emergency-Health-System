@@ -244,7 +244,7 @@ const DriverDetails: React.FC<Props> = ({ data, loading = false, error = null })
               ) : (
                 <div
                   className="border rounded d-flex align-items-center justify-content-center"
-                  style={{ height: 240 }}
+                  style={{ height: 170 }}
                 >
                   <div className="text-muted">No Image</div>
                 </div>
@@ -332,7 +332,7 @@ const DriverDetails: React.FC<Props> = ({ data, loading = false, error = null })
                         ) : (
                           <div
                             className="border rounded d-flex align-items-center justify-content-center"
-                            style={{ height: 200 }}
+                            style={{ height: 170 }}
                           >
                             <div className="text-muted">No Image</div>
                           </div>
@@ -345,25 +345,6 @@ const DriverDetails: React.FC<Props> = ({ data, loading = false, error = null })
                 ))}
               </Row>
             </div>
-          </Section>
-        </Card.Body>
-      </Card>
-
-      <Card className="mb-4">
-        <Card.Body>
-          <Section title="">
-            <Button variant="" className="me-2 mb-2 bg-light text-dark">
-              Cancel
-            </Button>
-            <Button variant="secondary" className="me-2 mb-2">
-              OTP Match
-            </Button>
-            <Button variant="success" className="me-2 mb-2">
-              Complete
-            </Button>
-            <Button variant="info" className="me-2 mb-2">
-              Assign
-            </Button>
           </Section>
         </Card.Body>
       </Card>

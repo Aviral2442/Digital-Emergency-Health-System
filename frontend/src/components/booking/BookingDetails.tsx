@@ -256,6 +256,16 @@ const paymentStatusOptions = [
   { value: 3, label: "Refunded" },
 ];
 
+const TypeOfRental = [
+  { value: 0, label: "Hourly Booking" },
+  { value: 1, label: "Day Booking" },
+];
+
+const VirtualNumberStatusOptions = [
+  { value: 0, label: "Not Masking" },
+  { value: 1, label: "Masking" },
+];
+
 // Define field configuration interface
 interface FieldConfig {
   label: string;
@@ -303,7 +313,9 @@ const AmbulanceBookingDetailsForm: React.FC<
   // Consumer Search Modal State
   const [showConsumerSearchModal, setShowConsumerSearchModal] = useState(false);
   const [consumerSearchQuery, setConsumerSearchQuery] = useState("");
-  const [consumerSearchResults, setConsumerSearchResults] = useState<Consumer[]>([]);
+  const [consumerSearchResults, setConsumerSearchResults] = useState<
+    Consumer[]
+  >([]);
   const [searchingConsumer, setSearchingConsumer] = useState(false);
 
   const handleFieldUpdate = async (field: string, value: string) => {
@@ -368,9 +380,13 @@ const AmbulanceBookingDetailsForm: React.FC<
     setSearchingConsumer(true);
     try {
       const response = await axios.get(
-        `${baseURL}/consumer/search_consumer?query=${encodeURIComponent(consumerSearchQuery)}`
+        `${baseURL}/consumer/search_consumer?query=${encodeURIComponent(
+          consumerSearchQuery
+        )}`
       );
-      setConsumerSearchResults(response.data.jsonData || response.data.data || []);
+      setConsumerSearchResults(
+        response.data.jsonData || response.data.data || []
+      );
     } catch (error) {
       console.error("Error searching consumers:", error);
       alert("Failed to search consumers");
@@ -441,40 +457,37 @@ const AmbulanceBookingDetailsForm: React.FC<
         {
           label: "Consumer Name",
           name: "booking_con_name",
-          editable: true,
-          cols: 4,
-          showViewIcon: true,
-          showConsumerSearch: true,
+          editable: false,
+          cols: 2,
         },
         {
           label: "Consumer Mobile",
           name: "booking_con_mobile",
           type: "tel",
-          editable: true,
-          cols: 4,
-          showConsumerSearch: true,
+          editable: false,
+          cols: 2,
         },
-        { label: "OTP", name: "booking_view_otp", editable: false, cols: 3 },
+        { label: "OTP", name: "booking_view_otp", editable: false, cols: 2 },
         {
           label: "OTP Status",
           name: "booking_view_status_otp",
           type: "boolean",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
         {
           label: "Rating Status",
           name: "booking_view_rating_status",
           type: "boolean",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
         {
           label: "Consumer to Driver Rating Status",
           name: "booking_view_rating_c_to_d_status",
           type: "boolean",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
       ],
     },
@@ -511,15 +524,15 @@ const AmbulanceBookingDetailsForm: React.FC<
           label: "Schedule Time",
           name: "booking_schedule_time",
           type: "datetime-local",
-          editable: true,
-          cols: 4,
+          editable: false,
+          cols: 3,
         },
         {
           label: "Created At",
           name: "created_at",
           type: "datetime-local",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
       ],
     },
@@ -529,30 +542,48 @@ const AmbulanceBookingDetailsForm: React.FC<
         {
           label: "Pickup Location",
           name: "booking_pickup",
-          type: "textarea",
+          type: "text",
           editable: false,
-          rows: 2,
           cols: 6,
         },
         {
           label: "Drop Location",
           name: "booking_drop",
-          type: "textarea",
+          type: "text",
           editable: false,
-          rows: 2,
           cols: 6,
         },
-        { label: "Pickup City", name: "booking_pickup_city", editable: false, cols: 3 },
-        { label: "Drop City", name: "booking_drop_city", editable: false, cols: 3 },
-        { label: "Distance (KM)", name: "booking_distance", editable: false, cols: 3 },
-        { label: "Duration", name: "booking_duration", editable: false, cols: 3 },
+        {
+          label: "Pickup City",
+          name: "booking_pickup_city",
+          editable: false,
+          cols: 2,
+        },
+        {
+          label: "Drop City",
+          name: "booking_drop_city",
+          editable: false,
+          cols: 2,
+        },
+        {
+          label: "Distance (KM)",
+          name: "booking_distance",
+          editable: false,
+          cols: 2,
+        },
+        {
+          label: "Duration",
+          name: "booking_duration",
+          editable: false,
+          cols: 2,
+        },
         {
           label: "Duration (Sec)",
           name: "booking_duration_in_sec",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
-        { label: "Radius", name: "booking_radius", editable: false, cols: 3 },
+        { label: "Radius", name: "booking_radius", editable: false, cols: 2 },
       ],
     },
     {
@@ -563,95 +594,42 @@ const AmbulanceBookingDetailsForm: React.FC<
           name: "booking_total_amount",
           type: "number",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
         {
           label: "Booking Amount",
           name: "booking_amount",
           type: "number",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
         {
           label: "Advance Amount",
           name: "booking_adv_amount",
           type: "number",
-          cols: 3,
+          editable: false,
+          cols: 2,
         },
         {
           label: "Payment Method",
           name: "booking_payment_method",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
         {
           label: "Payment Type",
           name: "booking_payment_type",
           editable: false,
-          cols: 3,
+          cols: 2,
         },
         {
           label: "Payment Status",
           name: "booking_payment_status",
           type: "select",
           options: paymentStatusOptions,
-          cols: 3,
-        },
-      ],
-    },
-    {
-      title: "Vehicle & Driver Information",
-      fields: [
-        { label: "Vehicle", name: "v_vehicle_name", editable: false, cols: 4 },
-        {
-          label: "Vehicle RC",
-          name: "vehicle_rc_number",
           editable: false,
-          cols: 4,
+          cols: 2,
         },
-        {
-          label: "Driver Name",
-          name: "driver_full_name",
-          editable: false,
-          cols: 4,
-          showAssignDriver: true,
-        },
-        {
-          label: "Driver Mobile",
-          name: "driver_mobile",
-          editable: false,
-          cols: 4,
-        },
-        {
-          label: "Accept Time",
-          name: "booking_acpt_time",
-          type: "datetime-local",
-          editable: false,
-          cols: 4,
-        },
-        {
-          label: "Arrival to Pickup Duration (Sec)",
-          name: "booking_a_t_p_duration_in_sec",
-          editable: false,
-          cols: 4,
-        },
-        {
-          label: "Arrival to Pickup Distance",
-          name: "booking_ap_distance",
-          editable: false,
-          cols: 4,
-        },
-        {
-          label: "Arrival to Pickup Duration",
-          name: "booking_ap_duration",
-          editable: false,
-          cols: 4,
-        },
-      ],
-    },
-    {
-      title: "Rate Information",
-      fields: [
         {
           label: "Base Rate",
           name: "booking_view_base_rate",
@@ -717,6 +695,55 @@ const AmbulanceBookingDetailsForm: React.FC<
       ],
     },
     {
+      title: "Vehicle & Driver Information",
+      fields: [
+        { label: "Vehicle", name: "v_vehicle_name", editable: false, cols: 3 },
+        {
+          label: "Vehicle RC",
+          name: "vehicle_rc_number",
+          editable: false,
+          cols: 3,
+        },
+        {
+          label: "Driver Name",
+          name: "driver_full_name",
+          editable: false,
+          cols: 3,
+        },
+        {
+          label: "Driver Mobile",
+          name: "driver_mobile",
+          editable: false,
+          cols: 3,
+        },
+        {
+          label: "Accept Time",
+          name: "booking_acpt_time",
+          type: "datetime-local",
+          editable: false,
+          cols: 3,
+        },
+        {
+          label: "Arrival to Pickup Duration (Sec)",
+          name: "booking_a_t_p_duration_in_sec",
+          editable: false,
+          cols: 3,
+        },
+        {
+          label: "Arrival to Pickup Distance",
+          name: "booking_ap_distance",
+          editable: false,
+          cols: 3,
+        },
+        {
+          label: "Arrival to Pickup Duration",
+          name: "booking_ap_duration",
+          editable: false,
+          cols: 3,
+        },
+      ],
+    },
+    {
       title: "Bulk Booking Information",
       show: isBulkBooking(),
       fields: [
@@ -749,6 +776,8 @@ const AmbulanceBookingDetailsForm: React.FC<
           label: "Rental Type",
           name: "booking_type_for_rental",
           editable: false,
+          options: TypeOfRental,
+          type: "select",
           cols: 6,
         },
       ],
@@ -761,67 +790,63 @@ const AmbulanceBookingDetailsForm: React.FC<
           name: "booking_view_arrival_time",
           type: "datetime-local",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Pickup Time",
           name: "booking_view_pickup_time",
           type: "datetime-local",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Dropped Time",
           name: "booking_view_dropped_time",
           type: "datetime-local",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Shoot Time",
           name: "bv_shoot_time",
           type: "datetime-local",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Virtual Number",
           name: "bv_virtual_number",
           type: "tel",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Virtual Number Status",
           name: "bv_virtual_number_status",
-          type: "boolean",
+          type: "select",
+          options: VirtualNumberStatusOptions,
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
-          label: "Cloud Consumer CRID",
+          label: "Cloud Consumer CRID (D to C)",
           name: "bv_cloud_con_crid",
           editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Cloud Consumer CRID (C to D)",
           name: "bv_cloud_con_crid_c_to_d",
           editable: false,
-          cols: 4,
-        },
-        {
-          label: "Category Icon",
-          name: "booking_view_category_icon",
-          editable: false,
-          cols: 4,
+          cols: 3,
         },
         {
           label: "Includes",
           name: "booking_view_includes",
-          type: "textarea",
+          type: "text",
+          editable: false,
           rows: 3,
-          cols: 6,
+          cols: 3,
         },
       ],
     },
@@ -910,7 +935,9 @@ const AmbulanceBookingDetailsForm: React.FC<
                         }
                         showConsumerSearch={f.showConsumerSearch}
                         onConsumerSearch={
-                          f.showConsumerSearch ? handleConsumerSearch : undefined
+                          f.showConsumerSearch
+                            ? handleConsumerSearch
+                            : undefined
                         }
                       />
                     </Col>
@@ -921,29 +948,6 @@ const AmbulanceBookingDetailsForm: React.FC<
           </Card>
         );
       })}
-
-      <Card className="mb-4">
-        <Card.Body>
-          <Section title="">
-            <Button variant="" className="me-2 mb-2 bg-light text-dark">
-              Cancel Booking
-            </Button>
-            <Button variant="secondary" className="me-2 mb-2">
-              Verify OTP
-            </Button>
-            <Button variant="success" className="me-2 mb-2">
-              Complete Booking
-            </Button>
-            <Button
-              variant="info"
-              className="me-2 mb-2"
-              onClick={handleAssignDriver}
-            >
-              Assign Driver
-            </Button>
-          </Section>
-        </Card.Body>
-      </Card>
 
       {/* Consumer Search Modal */}
       <Modal
@@ -989,7 +993,10 @@ const AmbulanceBookingDetailsForm: React.FC<
               <p className="mt-2">Searching...</p>
             </div>
           ) : consumerSearchResults.length > 0 ? (
-            <div className="table-responsive" style={{ maxHeight: "300px", overflowY: "auto" }}>
+            <div
+              className="table-responsive"
+              style={{ maxHeight: "300px", overflowY: "auto" }}
+            >
               <table className="table table-hover">
                 <thead className="table-light sticky-top">
                   <tr>
