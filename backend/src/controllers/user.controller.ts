@@ -55,12 +55,12 @@ export const getPartnersController = async (req: Request, res: Response) => {
 };
 
 // Get State ID by City ID Controller
-export const getStateIdByCityIdController = async (req: Request, res: Response, next: NextFunction) => {
+export const getStateIdByCityIdController = async (req: Request, res: Response) => {
   try {
     const cityId = parseInt(req.params.cityId);
     const result = await getStateIdByCityIdService(cityId);
     res.json(result);
   } catch (error) {
-    next(error);
+    res.status(500).json({ error: "Failed to fetch state ID by city ID" });
   }
 };

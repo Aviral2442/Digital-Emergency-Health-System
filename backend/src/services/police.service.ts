@@ -193,7 +193,11 @@ export const addPoliceService = async (policeData: PoliceData) => {
 // FETCH POLICE BY ID SERVICE
 export const fetchPoliceByIdService = async (police_id: number) => {
     try {
-        const query = `SELECT * FROM police WHERE police_id = ?`;
+        const query = `
+        SELECT police.*, city.city_name, city.city_state
+        FROM police
+        LEFT JOIN city ON police.police_city_id = city.city_id
+        WHERE police_id = ?`;
 
         const [rows]: any = await db.query(query, [police_id]);
 
@@ -279,7 +283,9 @@ export const policeAllDataByIdService = async (police_id: number) => {
             vehicle.vehicle_rc_number,
             partner.partner_f_name + " " + partner.partner_l_name AS partner_full_name,
             partner.partner_mobile,
-            city.city_name
+            city.city_name,
+            city.city_state,
+            city.city_id
         FROM police
         LEFT JOIN partner ON police.police_created_by = 1 AND police.police_created_partner_id = partner.partner_id
         LEFT JOIN city ON police.police_city_id = city.city_id

@@ -17,8 +17,6 @@ const policeValidationSchema = Yup.object({
   police_gender: Yup.string().required("Gender is required"),
   police_state: Yup.string().required("State is required"),
   police_city_id: Yup.string().required("City is required"),
-  // police_created_by: Yup.number().required("Created by is required"),
-  // police_created_partner_id: Yup.number().required("Partner ID is required"),
 });
 
 const AddPolice = () => {
@@ -31,6 +29,7 @@ const AddPolice = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [partners, setPartners] = useState<Array<{ partner_id: number; partner_f_name: string, partner_l_name: string, partner_mobile: string }>>([]);
+  const [states, setStates] = useState<Array<{ state_id: number; state_name: string }>>([]);
   const [cities, setCities] = useState<Array<{ city_id: number; city_name: string }>>([]);
 
   const [initialValues, setInitialValues] = useState({
@@ -52,31 +51,42 @@ const AddPolice = () => {
     }
   }, [id]);
 
-
-  const fetchCities = async () => {
+  const fetchStates = async () => {
     try {
-      const response = await axios.get(`${baseURL}/get_cities`);
-      // console.log("Cities fetched:", response.data);
+      const response = await axios.get(`${baseURL}/get_states`);
+      setStates(response.data?.jsonData?.state_list || []);
+    } catch (error) {
+      console.error("Error fetching states:", error);
+      setStates([]);
+    }
+  };
+
+  const fetchCitiesByState = async (stateId: string) => {
+    if (!stateId) {
+      setCities([]);
+      return;
+    }
+    try {
+      const response = await axios.get(`${baseURL}/get_cities/${stateId}`);
       setCities(response.data?.jsonData?.city_list || []);
     } catch (error) {
       console.error("Error fetching cities:", error);
       setCities([]);
     }
-  }
+  };
 
   const fetchPartners = async () => {
     try {
       const response = await axios.get(`${baseURL}/get_partners_list`);
-      // console.log("Partners fetched:", response.data);
       setPartners(response.data?.jsonData?.partners || []);
     } catch (error) {
       console.error("Error fetching partners:", error);
       setPartners([]);
     }
-  }
+  };
 
   React.useEffect(() => {
-    fetchCities();
+    fetchStates();
     fetchPartners();
   }, []);
 
@@ -87,11 +97,26 @@ const AddPolice = () => {
         `${baseURL}/police/fetch_police/${id}`
       );
       const police = response.data?.jsonData?.police;
-
-      // Convert Unix timestamp to YYYY-MM-DD format
+      console.log("Fetched police details:", police);
+      
       const dobDate = police.police_dob
         ? new Date(police.police_dob * 1000).toISOString().split("T")[0]
         : "";
+
+      // Fetch state ID from city ID
+      let stateId = "";
+      if (police.police_city_id) {
+        try {
+          const stateResponse = await axios.get(`${baseURL}/get_state_id/${police.police_city_id}`);
+          stateId = stateResponse.data?.jsonData?.state_id?.toString() || "";
+          
+          if (stateId) {
+            await fetchCitiesByState(stateId);
+          }
+        } catch (error) {
+          console.error("Error fetching state from city:", error);
+        }
+      }
 
       setInitialValues({
         police_profile_img: null,
@@ -100,17 +125,15 @@ const AddPolice = () => {
         police_mobile: police.police_mobile?.toString() || "",
         police_dob: dobDate,
         police_gender: police.police_gender || "",
-        police_state: police.police_state?.toString() || "",
+        police_state: stateId,
         police_city_id: police.police_city_id?.toString() || "",
         police_created_by: police.police_created_by?.toString() || "",
         police_created_partner_id: police.police_created_partner_id?.toString() || "",
       });
 
-
       if (police.police_profile_img) {
         setPreviewImage(`${baseURL}/${police.police_profile_img}`);
       }
-      // console.log("Police details fetched:", police);
     } catch (err: any) {
       console.error("Error fetching police details:", err);
       setError(err.response?.data?.message || "Failed to fetch police details");
@@ -134,6 +157,13 @@ const AddPolice = () => {
     }
   };
 
+  const handleStateChange = async (e: React.ChangeEvent<HTMLSelectElement>, setFieldValue: any) => {
+    const stateId = e.target.value;
+    setFieldValue("police_state", stateId);
+    setFieldValue("police_city_id", ""); // Reset city when state changes
+    await fetchCitiesByState(stateId);
+  };
+
   const handleSubmit = async (values: typeof initialValues) => {
     setSubmitting(true);
     setError(null);
@@ -150,7 +180,7 @@ const AddPolice = () => {
       formData.append("police_mobile", values.police_mobile);
       formData.append("police_dob", values.police_dob);
       formData.append("police_gender", values.police_gender);
-      formData.append("police_state", values.police_state);
+      // Note: Not appending police_state - only city_id is sent to backend
       formData.append("police_city_id", values.police_city_id);
       formData.append("police_created_by", values.police_created_by);
       formData.append("police_created_partner_id", values.police_created_partner_id);
@@ -399,6 +429,33 @@ const AddPolice = () => {
                       <Col md={4}>
                         <Form.Group>
                           <Form.Label className="fs-6 fw-semibold">
+                            State <span className="text-danger">*</span>
+                          </Form.Label>
+                          <Form.Select
+                            name="police_state"
+                            value={values.police_state}
+                            onChange={(e) => handleStateChange(e, setFieldValue)}
+                            onBlur={handleBlur}
+                            isInvalid={
+                              touched.police_state && !!errors.police_state
+                            }
+                          >
+                            <option value="">Select State</option>
+                            {states.map((state) => (
+                              <option key={state.state_id} value={state.state_id}>
+                                {state.state_name}
+                              </option>
+                            ))}
+                          </Form.Select>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.police_state}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+
+                      <Col md={4}>
+                        <Form.Group>
+                          <Form.Label className="fs-6 fw-semibold">
                             City <span className="text-danger">*</span>
                           </Form.Label>
                           <Form.Select
@@ -409,6 +466,7 @@ const AddPolice = () => {
                             isInvalid={
                               touched.police_city_id && !!errors.police_city_id
                             }
+                            disabled={!values.police_state}
                           >
                             <option value="">Select City</option>
                             {cities.map((city) => (
