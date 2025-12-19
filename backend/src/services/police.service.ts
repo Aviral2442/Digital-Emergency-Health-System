@@ -241,6 +241,7 @@ export const updatePoliceService = async (police_id: number, updateData: PoliceD
         }
         updateData.updated_at = currentUnixTime();
 
+        console.log("Update Data:", updateData);
         const query = `UPDATE police SET ? WHERE police_id = ?`;
 
         await db.query(query, [updateData, police_id]);

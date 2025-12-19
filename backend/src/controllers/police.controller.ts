@@ -66,6 +66,7 @@ export const updatePoliceController = async (req: Request, res: Response, next: 
             ...body,
             police_profile_img: files,
         };
+        console.log("Update Police Data:", data);
 
         const response = await updatePoliceService(policeId, data);
         return res.status(response.status).json(response);
