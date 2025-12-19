@@ -97,33 +97,25 @@ const HospitalDetail: React.FC = () => {
       ],
     },
     {
-      title: "Timestamps & Status",
+      title: "Verification & Status",
       fields: [
         {
           label: "Added Timestamp",
           name: "hospital_added_timestamp",
           type: "datetime-local" as const,
+          cols: 2,
         },
-        { 
-          label: "Status", 
-          name: "hospital_status",
-          render: hospitalStatus,
-        },
-      ],
-    },
-    {
-      title: "Verification",
-      fields: [
-        { label: "Verified By", name: "verify_by" },
-        { label: "Verify Date", name: "verify_date", type: "datetime-local" as const },
-        { label: "Verify Status", name: "hospital_verify_status" },
+        { label: "Verified By", name: "verify_by", cols: 2 },
+        { label: "Verify Date", name: "verify_date", type: "datetime-local" as const, cols: 2 },
+        { label: "Verify Status", name: "hospital_verify_status", cols: 2 },
         {
           label: "Hospital Verify Date",
           name: "hospital_verify_date",
           type: "datetime-local" as const,
+          cols: 2,
         },
       ],
-    }
+    },
   ];
 
   return (
@@ -138,6 +130,12 @@ const HospitalDetail: React.FC = () => {
           </div>
           <div className="h5 mb-0 fs-4 fw-semibold">
             {hospital?.hospital_name ?? "N/A"}
+          </div>
+          <div>
+            <span className="h4 fw-semibold fs-4">Status:</span>{" "}
+            <strong className="fs-4 text-muted">
+              {hospitalStatus()}
+            </strong>
           </div>
         </Card.Body>
       </Card>
