@@ -150,7 +150,8 @@ export const mapLocationDashboardCounts = async () => {
             driver.driver_name, 
             driver.driver_mobile, 
             driver_live_location.driver_live_location_lat, 
-            driver_live_location.driver_live_location_long
+            driver_live_location.driver_live_location_long,
+            driver.driver_on_booking_status
         FROM driver_live_location
         LEFT JOIN driver ON driver_live_location.driver_live_location_d_id = driver.driver_id
         WHERE driver.driver_duty_status = 'ON'
@@ -163,7 +164,9 @@ export const mapLocationDashboardCounts = async () => {
             booking_pick_long,
             booking_drop_lat,
             booking_drop_long,
-            booking_polyline
+            booking_polyline,
+            booking_pickup,
+            booking_drop
         FROM booking_view
         WHERE booking_view.booking_schedule_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         `;

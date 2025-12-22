@@ -65,7 +65,7 @@ const Page = () => {
       shadowSize: [41, 41],
     });
 
-    const driverIcon = L.icon({
+    const driverFreeIcon = L.icon({
       iconUrl:driver,
       shadowUrl: markerShadowImg,
       iconSize: [25, 41],
@@ -74,8 +74,17 @@ const Page = () => {
       shadowSize: [41, 41],
     });
 
+    const driverBookingIcon = L.icon({
+      iconUrl:ambulance,
+      shadowUrl: markerShadowImg,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+
     const hospitalIcon = L.icon({
-      iconUrl: ambulance,
+      iconUrl: "https://api.iconify.design/fa-solid:hospital-symbol.svg?color=red",
       shadowUrl: markerShadowImg,
       iconSize: [25, 41],
       iconAnchor: [12, 41],
@@ -238,13 +247,7 @@ const Page = () => {
                             <div>
                               <strong>Police Officer</strong>
                               <br />
-                              <strong>ID:</strong> {police.police_id}
-                              <br />
-                              <strong>Name:</strong>{" "}
-                              {police.police_name || "N/A"}
-                              <br />
-                              <strong>Mobile:</strong>{" "}
-                              {police.police_mobile || "N/A"}
+                              {police.police_name || ""} ({police.police_mobile || ""})
                             </div>
                           </Popup>
                         </Marker>
@@ -267,6 +270,11 @@ const Page = () => {
                     const lat = parseFloat(driver.driver_live_location_lat);
                     const lng = parseFloat(driver.driver_live_location_long);
                     if (!isNaN(lat) && !isNaN(lng)) {
+                      // Determine icon based on booking status
+                      const driverIcon = driver.driver_on_booking_status === "1" 
+                        ? driverBookingIcon 
+                        : driverFreeIcon;
+                      
                       return (
                         <Marker
                           key={driver.driver_id}
@@ -277,13 +285,10 @@ const Page = () => {
                             <div>
                               <strong>Driver</strong>
                               <br />
-                              <strong>ID:</strong> {driver.driver_id}
+                              {driver.driver_name || ""} ({driver.driver_mobile || ""})                              
                               <br />
-                              <strong>Name:</strong>{" "}
-                              {driver.driver_name || "N/A"}
-                              <br />
-                              <strong>Mobile:</strong>{" "}
-                              {driver.driver_mobile || "N/A"}
+                              <strong>Status:</strong>{" "}
+                              {driver.driver_on_booking_status === "1" ? "On Booking" : "Free"}
                             </div>
                           </Popup>
                         </Marker>
@@ -316,10 +321,7 @@ const Page = () => {
                             <div>
                               <strong>Hospital</strong>
                               <br />
-                              <strong>ID:</strong> {hospital.hospital_id}
-                              <br />
-                              <strong>Name:</strong>{" "}
-                              {hospital.hospital_name || "N/A"}
+                              {hospital.hospital_name || ""}
                             </div>
                           </Popup>
                         </Marker>
@@ -355,10 +357,8 @@ const Page = () => {
                                 📍 Pickup Location
                               </strong>
                               <br />
-                              <strong>Booking ID:</strong> {booking.booking_id}
-                              <br />
                               <strong>Pickup:</strong>{" "}
-                              {booking.booking_pickup || "N/A"}
+                              {booking.booking_pickup || ""}
                             </div>
                           </Popup>
                         </Marker>
@@ -394,8 +394,6 @@ const Page = () => {
                                 🏁 Drop Location
                               </strong>
                               <br />
-                              <strong>Booking ID:</strong> {booking.booking_id}
-                              <br />
                               <strong>Drop:</strong>{" "}
                               {booking.booking_drop || "N/A"}
                             </div>
@@ -429,8 +427,6 @@ const Page = () => {
                             <Popup>
                               <div>
                                 <strong>Booking Route</strong>
-                                <br />
-                                <strong>ID:</strong> {booking.booking_id}
                                 <br />
                                 <strong>From:</strong>{" "}
                                 {booking.booking_pickup || "N/A"}
