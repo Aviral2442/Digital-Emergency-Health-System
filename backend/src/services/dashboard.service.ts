@@ -151,7 +151,8 @@ export const mapLocationDashboardCounts = async () => {
             driver.driver_mobile, 
             driver_live_location.driver_live_location_lat, 
             driver_live_location.driver_live_location_long,
-            driver.driver_on_booking_status
+            driver.driver_on_booking_status,
+            driver.driver_duty_status
         FROM driver_live_location
         LEFT JOIN driver ON driver_live_location.driver_live_location_d_id = driver.driver_id
         WHERE driver.driver_duty_status = 'ON'

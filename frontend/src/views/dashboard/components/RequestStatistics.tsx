@@ -23,7 +23,7 @@ import React from "react";
 import pickup from "@/assets/images/leaflet/pickup_marker.png";
 import drop from "@/assets/images/leaflet/drop_marker.png";
 import ambulance from "@/assets/images/leaflet/map_ambulance.png";
-import driver from "@/assets/images/leaflet/ambulance_marker.png"
+import driver from "@/assets/images/leaflet/ambulance_marker.png";
 
 const Page = () => {
   const baseURL = (import.meta as any).env?.VITE_PATH ?? "";
@@ -66,7 +66,7 @@ const Page = () => {
     });
 
     const driverFreeIcon = L.icon({
-      iconUrl:driver,
+      iconUrl: driver,
       shadowUrl: markerShadowImg,
       iconSize: [25, 41],
       iconAnchor: [12, 41],
@@ -75,7 +75,7 @@ const Page = () => {
     });
 
     const driverBookingIcon = L.icon({
-      iconUrl:ambulance,
+      iconUrl: ambulance,
       shadowUrl: markerShadowImg,
       iconSize: [25, 41],
       iconAnchor: [12, 41],
@@ -84,7 +84,8 @@ const Page = () => {
     });
 
     const hospitalIcon = L.icon({
-      iconUrl: "https://api.iconify.design/fa-solid:hospital-symbol.svg?color=red",
+      iconUrl:
+        "https://api.iconify.design/fa-solid:hospital-symbol.svg?color=red",
       shadowUrl: markerShadowImg,
       iconSize: [25, 41],
       iconAnchor: [12, 41],
@@ -180,27 +181,27 @@ const Page = () => {
           <CardTitle as="h5" className="">
             Live Location Tracker
           </CardTitle>
-          <div className="d-flex justify-content-between"> 
+          <div className="d-flex justify-content-between">
             <p className="text-muted mb-0">
-            Live location tracking for drivers, police, hospitals, and booking
-            routes. <br />
-            driver = green | police = blue | hospital = red | booking pickup =
-            orange | booking drop = purple
-          </p>
-          <div className="">
-            <span className="border px-3 py-1 rounded">
-              {bookingLiveLocations.length} Bookings
-            </span>
-            <span className="border px-3 py-1 rounded mx-2">
-              {driverLiveLocations.length} Drivers
-            </span>
-            <span className="border px-3 py-1 rounded me-2">
+              Live location tracking for drivers, police, hospitals, and booking
+              routes. <br />
+              driver = green | police = blue | hospital = red | booking pickup =
+              orange | booking drop = purple
+            </p>
+            <div className="">
+              <span className="border px-3 py-1 rounded">
+                {bookingLiveLocations.length} Bookings
+              </span>
+              <span className="border px-3 py-1 rounded mx-2">
+                {driverLiveLocations.length} Drivers
+              </span>
+              <span className="border px-3 py-1 rounded me-2">
                 {policeLiveLocations.length} Police
-            </span>
-            <span className="border px-3 py-1 rounded">
+              </span>
+              <span className="border px-3 py-1 rounded">
                 {hospitalLiveLocations.length} Hospitals
-            </span>
-          </div>
+              </span>
+            </div>
           </div>
         </CardHeader>
         <CardBody>
@@ -247,7 +248,8 @@ const Page = () => {
                             <div>
                               <strong>Police Officer</strong>
                               <br />
-                              {police.police_name || ""} ({police.police_mobile || ""})
+                              {police.police_name || ""} (
+                              {police.police_mobile || ""})
                             </div>
                           </Popup>
                         </Marker>
@@ -259,43 +261,84 @@ const Page = () => {
               </LayersControl.Overlay>
 
               {/* Driver Markers with Green Clustering */}
-              <LayersControl.Overlay checked name="Drivers">
+              <LayersControl.Overlay checked name="Drivers Free">
                 <MarkerClusterGroup
                   iconCreateFunction={(cluster: any) =>
                     createClusterCustomIcon(cluster, "#00cc66")
                   }
                   chunkedLoading
                 >
-                  {driverLiveLocations.map((driver: any) => {
-                    const lat = parseFloat(driver.driver_live_location_lat);
-                    const lng = parseFloat(driver.driver_live_location_long);
-                    if (!isNaN(lat) && !isNaN(lng)) {
-                      // Determine icon based on booking status
-                      const driverIcon = driver.driver_on_booking_status === "1" 
-                        ? driverBookingIcon 
-                        : driverFreeIcon;
-                      
-                      return (
-                        <Marker
-                          key={driver.driver_id}
-                          position={[lat, lng]}
-                          icon={driverIcon}
-                        >
-                          <Popup>
-                            <div>
-                              <strong>Driver</strong>
-                              <br />
-                              {driver.driver_name || ""} ({driver.driver_mobile || ""})                              
-                              <br />
-                              <strong>Status:</strong>{" "}
-                              {driver.driver_on_booking_status === "1" ? "On Booking" : "Free"}
-                            </div>
-                          </Popup>
-                        </Marker>
-                      );
-                    }
-                    return null;
-                  })}
+                  {driverLiveLocations
+                    .filter(
+                      (driver: any) =>
+                        driver.driver_duty_status === "ON" &&
+                        driver.driver_on_booking_status === "0"
+                    )
+                    .map((driver: any) => {
+                      const lat = parseFloat(driver.driver_live_location_lat);
+                      const lng = parseFloat(driver.driver_live_location_long);
+                      if (!isNaN(lat) && !isNaN(lng)) {
+                        return (
+                          <Marker
+                            key={driver.driver_id}
+                            position={[lat, lng]}
+                            icon={driverFreeIcon}
+                          >
+                            <Popup>
+                              <div>
+                                <strong>{driver.driver_id}</strong>{" "}
+                                <strong>Driver ( Off Duty)</strong>
+                                <br />
+                                {driver.driver_name || ""} (
+                                {driver.driver_mobile || ""})
+                              </div>
+                            </Popup>
+                          </Marker>
+                        );
+                      }
+                      return null;
+                    })}
+                </MarkerClusterGroup>
+              </LayersControl.Overlay>
+
+              {/* Driver Markers with Green Clustering */}
+              <LayersControl.Overlay checked name="Drivers In Booking">
+                <MarkerClusterGroup
+                  iconCreateFunction={(cluster: any) =>
+                    createClusterCustomIcon(cluster, "#00cc66")
+                  }
+                  chunkedLoading
+                >
+                  {driverLiveLocations
+                    .filter(
+                      (driver: any) =>
+                        driver.driver_duty_status === "ON" &&
+                        driver.driver_on_booking_status === "1"
+                    )
+                    .map((driver: any) => {
+                      const lat = parseFloat(driver.driver_live_location_lat);
+                      const lng = parseFloat(driver.driver_live_location_long);
+                      if (!isNaN(lat) && !isNaN(lng)) {
+                        return (
+                          <Marker
+                            key={driver.driver_id}
+                            position={[lat, lng]}
+                            icon={driverBookingIcon}
+                          >
+                            <Popup>
+                              <div>
+                                <strong>{driver.driver_id}</strong>{" "}
+                                <strong>Driver (On Duty)</strong>
+                                <br />
+                                {driver.driver_name || ""} (
+                                {driver.driver_mobile || ""})
+                              </div>
+                            </Popup>
+                          </Marker>
+                        );
+                      }
+                      return null;
+                    })}
                 </MarkerClusterGroup>
               </LayersControl.Overlay>
 
